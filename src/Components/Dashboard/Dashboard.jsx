@@ -1,7 +1,6 @@
 import "./Dashboard.css";
 import Logo from "../../assets/Icon.jpeg";
 // import Logo from "../../assets/Swift-Earn-Logo.jpg";
-import { NavLink } from "react-router-dom";
 import { IoHomeOutline } from "react-icons/io5";
 import { LuHardDriveDownload } from "react-icons/lu";
 import {
@@ -365,128 +364,128 @@ const Dashboard = () => {
               </div>
               <div className="DashboardNavLinks">
                 <div className="DashboardNavLinksRow1">
-                  <NavLink
-                    className="DashboardNavLinksItem"
-                    activeClassName="current"
+                  <button
+                    type="button"
+                    className={`DashboardNavLinksItem ${showHome ? "current" : ""}`}
                     onClick={handleShowHome}
                   >
                     <span>
                       <IoHomeOutline className="DashboardNavlinksIcons" />
                     </span>
                     <span>Home</span>
-                  </NavLink>
-                  <NavLink
-                    className="DashboardNavLinksItem "
+                  </button>
+                  <button
+                    type="button"
+                    className={`DashboardNavLinksItem ${showdeposit ? "current" : ""}`}
                     onClick={handleShowDeposit}
-                    activeClassName="current"
                   >
                     <span>
                       <LuHardDriveDownload className="DashboardNavlinksIcons" />
                     </span>
                     <span>Deposit</span>
-                  </NavLink>
+                  </button>
                 </div>
                 <div className="DashboardNavLinksRow2">
-                  <NavLink
-                    className="DashboardNavLinksItem"
+                  <button
+                    type="button"
+                    className={`DashboardNavLinksItem ${showWithdraw ? "current" : ""}`}
                     onClick={handleShowWithdraw}
-                    activeClassName="current"
                   >
                     <span>
                       <FaArrowAltCircleUp className="DashboardNavlinksIcons" />
                     </span>
                     <span>Withdrawal</span>
-                  </NavLink>
-                  <NavLink
-                    className="DashboardNavLinksItem"
+                  </button>
+                  <button
+                    type="button"
+                    className={`DashboardNavLinksItem ${showProfitHistory ? "current" : ""}`}
                     onClick={handleShowProfit}
-                    activeClassName="current"
                   >
                     <span>
                       <FaHistory className="DashboardNavlinksIcons" />
                     </span>
                     <span>Profit History</span>
-                  </NavLink>
+                  </button>
                 </div>
                 <div className="DashboardNavLinksRow3">
-                  <NavLink
-                    className="DashboardNavLinksItem"
+                  <button
+                    type="button"
+                    className={`DashboardNavLinksItem ${showTransaction ? "current" : ""}`}
                     onClick={handleShowTransactions}
-                    activeClassName="current"
                   >
                     <span>
                       <BsFillCreditCard2BackFill className="DashboardNavlinksIcons" />
                     </span>
                     <span>Transactions</span>
-                  </NavLink>
-                  <NavLink
-                    className="DashboardNavLinksItem"
+                  </button>
+                  <button
+                    type="button"
+                    className={`DashboardNavLinksItem ${showTransferFunds ? "current" : ""}`}
                     onClick={handleShowTransferFunds}
-                    activeClassName="current"
                   >
                     <span>
                       <BiTransfer className="DashboardNavlinksIcons" />
                     </span>
                     <span>Transfer Funds</span>
-                  </NavLink>
+                  </button>
                 </div>
                 <div className="DashboardNavLinksRow4">
-                  <NavLink
-                    className="DashboardNavLinksItem"
+                  <button
+                    type="button"
+                    className={`DashboardNavLinksItem ${showProfile ? "current" : ""}`}
                     onClick={handleShowProfile}
-                    activeClassName="current"
                   >
                     <span>
                       <FaAddressCard className="DashboardNavlinksIcons" />
                     </span>
                     <span>Profile</span>
-                  </NavLink>
-                  <NavLink
-                    className="DashboardNavLinksItem"
+                  </button>
+                  <button
+                    type="button"
+                    className={`DashboardNavLinksItem ${showTradingPlans ? "current" : ""}`}
                     onClick={handleShowTradingPlans}
-                    activeClassName="current"
                   >
                     <span>
                       <FaHandHoldingDollar className="DashboardNavlinksIcons" />
                     </span>
                     <span>Trading Plans</span>
-                  </NavLink>
+                  </button>
                 </div>
                 <div className="DashboardNavLinksRow5">
-                  <NavLink
-                    className="DashboardNavLinksItem"
+                  <button
+                    type="button"
+                    className={`DashboardNavLinksItem ${showMyPlans ? "current" : ""}`}
                     onClick={handleShowMyPlans}
-                    activeClassName="current"
                   >
                     <span>
                       <LiaHandHoldingHeartSolid className="DashboardNavlinksIcons" />
                     </span>
                     <span>My Plans</span>
-                  </NavLink>
-                  <NavLink
-                    className="DashboardNavLinksItem"
+                  </button>
+                  <button
+                    type="button"
+                    className={`DashboardNavLinksItem ${showReferrals ? "current" : ""}`}
                     onClick={handleShowReferrals}
-                    activeClassName="current"
                   >
                     <span>
                       <LuRepeat2 className="DashboardNavlinksIcons" />
                     </span>
                     <span>Referrals</span>
-                  </NavLink>
+                  </button>
                 </div>
 
                 {userData?.isAdmin ? (
                   <div className="DashboardNavLinksRow5">
-                    <NavLink
+                    <button
+                      type="button"
                       className="DashboardNavLinksItem"
                       onClick={handleAdmin}
-                      activeClassName="current"
                     >
                       <span>
                         <LiaHandHoldingHeartSolid className="DashboardNavlinksIcons" />
                       </span>
                       <span>Admin</span>
-                    </NavLink>
+                    </button>
                   </div>
                 ) : null}
               </div>
