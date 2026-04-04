@@ -101,9 +101,7 @@ const Dashboard = () => {
   };
 
   const handleLinkClick = () => {
-    if (window.innerWidth <= 480) {
-      handleShowNav();
-    }
+    setShowNav(false);
   };
 
   const handleLogOut = () => {
@@ -224,6 +222,7 @@ const Dashboard = () => {
                 <div className="DashboardNavLinksRow1">
                   <NavLink
                     to="/dashboard"
+                    onClick={handleLinkClick}
                     className={({ isActive }) =>
                       isActive
                         ? "DashboardNavLinksItem current"
@@ -238,6 +237,7 @@ const Dashboard = () => {
                   </NavLink>
                   <NavLink
                     to="/dashboard/deposit"
+                    onClick={handleLinkClick}
                     className={({ isActive }) =>
                       isActive
                         ? "DashboardNavLinksItem current"
@@ -253,6 +253,7 @@ const Dashboard = () => {
                 <div className="DashboardNavLinksRow2">
                   <NavLink
                     to="/dashboard/withdraw"
+                    onClick={handleLinkClick}
                     className={({ isActive }) =>
                       isActive
                         ? "DashboardNavLinksItem current"
@@ -266,6 +267,7 @@ const Dashboard = () => {
                   </NavLink>
                   <NavLink
                     to="/dashboard/profit-history"
+                    onClick={handleLinkClick}
                     className={({ isActive }) =>
                       isActive
                         ? "DashboardNavLinksItem current"
@@ -281,6 +283,7 @@ const Dashboard = () => {
                 <div className="DashboardNavLinksRow3">
                   <NavLink
                     to="/dashboard/transactions"
+                    onClick={handleLinkClick}
                     className={({ isActive }) =>
                       isActive
                         ? "DashboardNavLinksItem current"
@@ -294,6 +297,7 @@ const Dashboard = () => {
                   </NavLink>
                   <NavLink
                     to="/dashboard/transfer-funds"
+                    onClick={handleLinkClick}
                     className={({ isActive }) =>
                       isActive
                         ? "DashboardNavLinksItem current"
@@ -309,6 +313,7 @@ const Dashboard = () => {
                 <div className="DashboardNavLinksRow4">
                   <NavLink
                     to="/dashboard/profile"
+                    onClick={handleLinkClick}
                     className={({ isActive }) =>
                       isActive
                         ? "DashboardNavLinksItem current"
@@ -322,6 +327,7 @@ const Dashboard = () => {
                   </NavLink>
                   <NavLink
                     to="/dashboard/trading-plans"
+                    onClick={handleLinkClick}
                     className={({ isActive }) =>
                       isActive
                         ? "DashboardNavLinksItem current"
@@ -337,6 +343,7 @@ const Dashboard = () => {
                 <div className="DashboardNavLinksRow5">
                   <NavLink
                     to="/dashboard/my-plans"
+                    onClick={handleLinkClick}
                     className={({ isActive }) =>
                       isActive
                         ? "DashboardNavLinksItem current"
@@ -350,6 +357,7 @@ const Dashboard = () => {
                   </NavLink>
                   <NavLink
                     to="/dashboard/referrals"
+                    onClick={handleLinkClick}
                     className={({ isActive }) =>
                       isActive
                         ? "DashboardNavLinksItem current"
@@ -367,6 +375,7 @@ const Dashboard = () => {
                   <div className="DashboardNavLinksRow5">
                     <NavLink
                       to="/dashboard/admin"
+                      onClick={handleLinkClick}
                       className={({ isActive }) =>
                         isActive
                           ? "DashboardNavLinksItem current"
