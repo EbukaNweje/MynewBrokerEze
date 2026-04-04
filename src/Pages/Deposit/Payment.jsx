@@ -1,19 +1,27 @@
 import { FaCopy, FaWallet, FaUniversity } from "react-icons/fa";
 import { SiCashapp, SiPaypal, SiBitcoin } from "react-icons/si";
 import "./Payment.css";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import axios from "axios";
-import { useNavigate } from "react-router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateDepositData } from "../../Components/store/FeaturesSlice";
 import Modal from "../../Components/Modal/Modal";
 
 const Payment = () => {
-  const { paymentname, id } = useParams();
+  const { paymentname } = useParams();
+  const reduxUser = useSelector((state) => state.persisitedReducer.user);
+  const id =
+    reduxUser?._id || reduxUser?.id || localStorage.getItem("UserId") || "";
   const [pay, setpay] = useState(false);
   const [isButtonDisabled, setButtonDisabled] = useState(false);
+
+  useEffect(() => {
+    if (!id) {
+      console.warn("Payment page: user id not found in Redux or localStorage.");
+    }
+  }, [id]);
   const [uploadedFile, setUploadedFile] = useState(null);
   const amount = JSON.parse(localStorage.getItem("amount"));
 
@@ -212,8 +220,8 @@ const Payment = () => {
     }
   };
 
-  const url = `https://mynew-broker-eze-back-end.vercel.app/api/sendpayment/${id}`;
-  const url2 = `https://mynew-broker-eze-back-end.vercel.app/api/deposit/${id}`;
+  const url = `https://mynew-broker-eze-back-end.vercel.app/api/auth/sendpayment/${id}`;
+  const url2 = `https://mynew-broker-eze-back-end.vercel.app/api/deposits/deposit/${id}`;
 
   const data = {
     amount: amount,
@@ -263,7 +271,7 @@ const Payment = () => {
 
         // Redirect after 2 seconds
         setTimeout(() => {
-          nav(`/${id}`);
+          nav("/dashboard");
           dispatch(updateDepositData(depositDatas));
         }, 2000);
       })
@@ -369,7 +377,7 @@ const Payment = () => {
             <div className="PaymentActions">
               <button
                 className="secondary"
-                onClick={() => nav(`/${id}`)}
+                onClick={() => nav("/dashboard")}
                 disabled={isButtonDisabled}
               >
                 Cancel
@@ -406,7 +414,7 @@ const Payment = () => {
               <button
                 onClick={() => {
                   setpay(false);
-                  nav(`/${id}`);
+                  nav("/dashboard");
                   dispatch(updateDepositData(depositDatas));
                 }}
               >
@@ -422,7 +430,7 @@ const Payment = () => {
           onClose={() => {
             setShowModal(false);
             if (modalConfig.type === "success") {
-              nav(`/${id}`);
+              nav("/dashboard");
               dispatch(updateDepositData(depositDatas));
             }
           }}

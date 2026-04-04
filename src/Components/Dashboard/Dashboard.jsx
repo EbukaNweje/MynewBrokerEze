@@ -19,7 +19,7 @@ import { GoDatabase } from "react-icons/go";
 import { HiMiniUser } from "react-icons/hi2";
 import { FiLogOut } from "react-icons/fi";
 import { useState, useEffect, useRef } from "react";
-import { Outlet, NavLink } from "react-router-dom";
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { RiMenu3Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { swiftUserData } from "../store/FeaturesSlice";
@@ -33,8 +33,10 @@ import axios from "axios";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   // Select the full user object from Redux, not just idValue
   const reduxUser = useSelector((state) => state.persisitedReducer.user);
+  const authToken = useSelector((state) => state.persisitedReducer.authToken);
   const id = reduxUser?._id || "";
 
   const getYear = new Date().getFullYear();
@@ -108,6 +110,12 @@ const Dashboard = () => {
     localStorage.removeItem("UserId");
     window.location.href = "/#/login";
   };
+
+  const handleShowProfile = () => {
+    setShowUserDrop(false);
+    navigate("/dashboard/profile");
+  };
+
   const handleAdmin = () => {
     // window.location.href = "https://www.whitebitcrypfield.org/#/admin";
   };
@@ -132,9 +140,50 @@ const Dashboard = () => {
     Swal.fire("Contact us on live support");
   };
   const [showNotification, setNotification] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [notificationsLoading, setNotificationsLoading] = useState(false);
+  const [notificationsError, setNotificationsError] = useState(null);
+
+  const getNotifications = async () => {
+    setNotificationsLoading(true);
+    setNotificationsError(null);
+
+    const token =
+      authToken ||
+      localStorage.getItem("authToken") ||
+      localStorage.getItem("token");
+    const headers = token
+      ? {
+          Authorization: `Bearer ${token}`,
+        }
+      : {};
+
+    try {
+      const response = await axios.get(
+        `https://mynew-broker-eze-back-end.vercel.app/api/notifications/getallnotification/${id}`,
+        { headers },
+      );
+      const data = response.data?.data ?? response.data;
+      console.log("data", data);
+      setNotifications(Array.isArray(data) ? data : data ? [data] : []);
+    } catch (error) {
+      console.error("Notification fetch error:", error);
+      setNotifications([]);
+      setNotificationsError(
+        error.response?.data?.message || "Unable to load notifications.",
+      );
+    } finally {
+      setNotificationsLoading(false);
+    }
+  };
 
   const handleNotification = () => {
-    setNotification((prev) => !prev);
+    setNotification((prev) => {
+      if (!prev) {
+        getNotifications();
+      }
+      return !prev;
+    });
   };
 
   const handleInvestmentButton = () => {
@@ -175,7 +224,11 @@ const Dashboard = () => {
                 <div className="DashboardNavLinksRow1">
                   <NavLink
                     to="/dashboard"
-                    className="DashboardNavLinksItem"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "DashboardNavLinksItem current"
+                        : "DashboardNavLinksItem"
+                    }
                     end
                   >
                     <span>
@@ -185,7 +238,11 @@ const Dashboard = () => {
                   </NavLink>
                   <NavLink
                     to="/dashboard/deposit"
-                    className="DashboardNavLinksItem"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "DashboardNavLinksItem current"
+                        : "DashboardNavLinksItem"
+                    }
                   >
                     <span>
                       <LuHardDriveDownload className="DashboardNavlinksIcons" />
@@ -196,7 +253,11 @@ const Dashboard = () => {
                 <div className="DashboardNavLinksRow2">
                   <NavLink
                     to="/dashboard/withdraw"
-                    className="DashboardNavLinksItem"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "DashboardNavLinksItem current"
+                        : "DashboardNavLinksItem"
+                    }
                   >
                     <span>
                       <FaArrowAltCircleUp className="DashboardNavlinksIcons" />
@@ -205,7 +266,11 @@ const Dashboard = () => {
                   </NavLink>
                   <NavLink
                     to="/dashboard/profit-history"
-                    className="DashboardNavLinksItem"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "DashboardNavLinksItem current"
+                        : "DashboardNavLinksItem"
+                    }
                   >
                     <span>
                       <FaHistory className="DashboardNavlinksIcons" />
@@ -216,7 +281,11 @@ const Dashboard = () => {
                 <div className="DashboardNavLinksRow3">
                   <NavLink
                     to="/dashboard/transactions"
-                    className="DashboardNavLinksItem"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "DashboardNavLinksItem current"
+                        : "DashboardNavLinksItem"
+                    }
                   >
                     <span>
                       <BsFillCreditCard2BackFill className="DashboardNavlinksIcons" />
@@ -225,7 +294,11 @@ const Dashboard = () => {
                   </NavLink>
                   <NavLink
                     to="/dashboard/transfer-funds"
-                    className="DashboardNavLinksItem"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "DashboardNavLinksItem current"
+                        : "DashboardNavLinksItem"
+                    }
                   >
                     <span>
                       <BiTransfer className="DashboardNavlinksIcons" />
@@ -236,7 +309,11 @@ const Dashboard = () => {
                 <div className="DashboardNavLinksRow4">
                   <NavLink
                     to="/dashboard/profile"
-                    className="DashboardNavLinksItem"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "DashboardNavLinksItem current"
+                        : "DashboardNavLinksItem"
+                    }
                   >
                     <span>
                       <FaAddressCard className="DashboardNavlinksIcons" />
@@ -245,7 +322,11 @@ const Dashboard = () => {
                   </NavLink>
                   <NavLink
                     to="/dashboard/trading-plans"
-                    className="DashboardNavLinksItem"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "DashboardNavLinksItem current"
+                        : "DashboardNavLinksItem"
+                    }
                   >
                     <span>
                       <FaHandHoldingDollar className="DashboardNavlinksIcons" />
@@ -256,7 +337,11 @@ const Dashboard = () => {
                 <div className="DashboardNavLinksRow5">
                   <NavLink
                     to="/dashboard/my-plans"
-                    className="DashboardNavLinksItem"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "DashboardNavLinksItem current"
+                        : "DashboardNavLinksItem"
+                    }
                   >
                     <span>
                       <LiaHandHoldingHeartSolid className="DashboardNavlinksIcons" />
@@ -265,7 +350,11 @@ const Dashboard = () => {
                   </NavLink>
                   <NavLink
                     to="/dashboard/referrals"
-                    className="DashboardNavLinksItem"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "DashboardNavLinksItem current"
+                        : "DashboardNavLinksItem"
+                    }
                   >
                     <span>
                       <LuRepeat2 className="DashboardNavlinksIcons" />
@@ -278,7 +367,11 @@ const Dashboard = () => {
                   <div className="DashboardNavLinksRow5">
                     <NavLink
                       to="/dashboard/admin"
-                      className="DashboardNavLinksItem"
+                      className={({ isActive }) =>
+                        isActive
+                          ? "DashboardNavLinksItem current"
+                          : "DashboardNavLinksItem"
+                      }
                     >
                       <span>
                         <LiaHandHoldingHeartSolid className="DashboardNavlinksIcons" />
@@ -310,7 +403,9 @@ const Dashboard = () => {
                     <IoIosNotifications
                       style={{ fontSize: "20px", cursor: "pointer" }}
                     />
-                    {userData?.notification && <span className="red-dot" />}
+                    {(notifications.length > 0 || userData?.notification) && (
+                      <span className="red-dot" />
+                    )}
                   </div>
                   <div
                     className={`notificationBar ${
@@ -335,38 +430,36 @@ const Dashboard = () => {
                       </div>
                     </div>
                     <div className="notification_body">
-                      {userData?.notification ? (
-                        userPlane
-                          ?.filter(
-                            (item) =>
-                              item.planName !== item.planName.toUpperCase(),
-                          ) // remove ALL UPPERCASE
-                          .map((item, index) => (
-                            <div
-                              className="notification_card"
-                              key={index}
-                              onClick={() => {
-                                handleInvestmentButton(); // this will setTradingPlans(true) and setShowNav(false)
-                              }}
-                            >
-                              <h4>{item?.planName}</h4>
-                              <p>ROI - {item?.rio}%</p>
-                              <p>Duration - {item?.durationDays} Days</p>
-                              <p>Minimum Deposit {item?.minimumDeposit}</p>
-                              <p>Maximum Deposit {item?.maximumDeposit}</p>
-                              <div className="investment_btn_div">
-                                <button
-                                  className="investment_btn"
-                                  // onClick={(e) => {
-                                  //     e.stopPropagation(); // Prevent bubbling up if clicking button
-                                  //     handleInvestmentButton();
-                                  // }}
-                                >
-                                  Invest Now
-                                </button>
-                              </div>
-                            </div>
-                          ))
+                      {notificationsLoading ? (
+                        <div className="no_notification">
+                          <div className="loader"></div>
+                          <h4>Loading notifications...</h4>
+                        </div>
+                      ) : notificationsError ? (
+                        <div className="no_notification">
+                          <h4>{notificationsError}</h4>
+                        </div>
+                      ) : notifications.length > 0 ? (
+                        notifications.map((item, index) => (
+                          <div
+                            className="notification_card"
+                            key={index}
+                            onClick={() => {
+                              handleInvestmentButton();
+                            }}
+                          >
+                            <h4>Notification</h4>
+                            <p>
+                              {item?.msg || item?.message || item?.title || ""}
+                            </p>
+                            <p>
+                              {item?.Date ||
+                                item?.createdAt ||
+                                item?.date ||
+                                ""}
+                            </p>
+                          </div>
+                        ))
                       ) : (
                         <div className="no_notification">
                           <h4>No Notifications</h4>

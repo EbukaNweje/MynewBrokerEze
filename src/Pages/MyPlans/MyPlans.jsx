@@ -13,7 +13,7 @@ const MyPlans = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const url = `https://mynew-broker-eze-back-end.vercel.app/api/getalluserplan/${id}`;
+  const url = `https://mynew-broker-eze-back-end.vercel.app/api/users/getalluserplan/${id}`;
 
   const getalluserplan = () => {
     setLoading(true);

@@ -4,10 +4,11 @@ import { LuArrowRightFromLine } from "react-icons/lu";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { useParams } from "react-router";
 
 const Transactions = () => {
-  const { id } = useParams();
+  const reduxUser = useSelector((state) => state.persisitedReducer.user);
+  const id =
+    reduxUser?._id || reduxUser?.id || localStorage.getItem("UserId") || "";
   const userData = useSelector((state) => state.persisitedReducer.depositData);
   const userData2 = useSelector((state) => state.persisitedReducer.withdraw);
 
@@ -18,15 +19,15 @@ const Transactions = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const url = `https://mynew-broker-eze-back-end.vercel.app/api/getalldeposit/${id}`;
-  const url2 = `https://mynew-broker-eze-back-end.vercel.app/api/getallwithdrawal/${id}`;
-  const url3 = `https://mynew-broker-eze-back-end.vercel.app/api/getalltransactions/${id}`;
+  const url = `https://mynew-broker-eze-back-end.vercel.app/api/users/getalldeposit/${id}`;
+  const url2 = `https://mynew-broker-eze-back-end.vercel.app/api/users/getallwithdrawal/${id}`;
+  const url3 = `https://mynew-broker-eze-back-end.vercel.app/api/users/getalltransactions/${id}`;
 
   const getAllDeposit = () => {
     axios
       .get(url)
       .then((res) => {
-        console.log("Deposits:", res.data.data);
+        console.log("Deposits:", res);
         setAllDeposit(Array.isArray(res.data.data) ? res.data.data : []);
       })
       .catch((err) => {
@@ -39,7 +40,7 @@ const Transactions = () => {
     axios
       .get(url2)
       .then((res) => {
-        console.log("Withdrawals:", res.data.data);
+        console.log("Withdrawals:", res);
         setAllWithdrawal(Array.isArray(res.data.data) ? res.data.data : []);
       })
       .catch((err) => {
@@ -62,15 +63,19 @@ const Transactions = () => {
   };
 
   useEffect(() => {
-    if (id) {
-      setLoading(true);
-      Promise.all([getAllDeposit(), getAllWithdrawal(), getAllOthers()])
-        .then(() => setLoading(false))
-        .catch(() => {
-          setLoading(false);
-          setError("Failed to load transactions");
-        });
+    if (!id) {
+      setError("Unable to load transactions: user ID missing.");
+      setLoading(false);
+      return;
     }
+
+    setLoading(true);
+    Promise.all([getAllDeposit(), getAllWithdrawal(), getAllOthers()])
+      .then(() => setLoading(false))
+      .catch(() => {
+        setLoading(false);
+        setError("Failed to load transactions");
+      });
   }, [id]);
 
   const getStatusClass = (status) => {

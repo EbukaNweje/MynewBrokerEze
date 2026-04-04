@@ -45,7 +45,6 @@ const App = () => {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/verify" element={<Verify />} />
           <Route path="/other" element={<Other />} />
-          <Route path=":id/payment/:paymentname" element={<Payment />} />
           <Route path="/dashboard" element={<Dashboard />}>
             <Route index element={<DashHome />} />
             <Route path="deposit" element={<Deposit />} />
@@ -58,6 +57,7 @@ const App = () => {
             <Route path="my-plans" element={<MyPlans />} />
             <Route path="referrals" element={<Referrals />} />
             <Route path="detail-plan" element={<DetailPlan />} />
+            <Route path="deposit/payment/:paymentname" element={<Payment />} />
           </Route>
         </Routes>
       </HashRouter>
