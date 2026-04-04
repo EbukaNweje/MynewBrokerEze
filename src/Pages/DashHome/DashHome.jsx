@@ -9,13 +9,10 @@ import { FaArrowRight, FaChevronRight } from "react-icons/fa6";
 import { getSinglePlan } from "../../Components/store/FeaturesSlice";
 import "../MyPlans/MyPlans.css";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { useNavigate } from "react-router-dom";
 
-const DashHome = ({
-  homechange,
-  planchange,
-  Transactions,
-  handleShowDetailPlan,
-}) => {
+const DashHome = () => {
+  const navigate = useNavigate();
   const [exchangeRate, setExchangeRate] = useState(null);
   const userData = useSelector((state) => state.persisitedReducer.user);
   const referralLink = useSelector(
@@ -64,7 +61,7 @@ const DashHome = ({
 
   const handleViewMoreSinglePlan = (item) => {
     dispatch(getSinglePlan(item));
-    handleShowDetailPlan();
+    navigate("/dashboard/detail-plan");
   };
 
   const [others, setOthers] = useState();
@@ -304,12 +301,7 @@ const DashHome = ({
                   <p>
                     You do not have an active investment plan at the moment.
                   </p>
-                  <button
-                    onClick={() => {
-                      homechange(false);
-                      planchange(true);
-                    }}
-                  >
+                  <button onClick={() => navigate("/dashboard/trading-plans")}>
                     Buy Plan
                   </button>
                 </>
@@ -324,10 +316,7 @@ const DashHome = ({
             <div className="DashHomeMainContenRecentTransactionDivBox">
               <p
                 className="DashHomeMainContenRecentTransactionDivBoxEndText"
-                onClick={() => {
-                  homechange(false);
-                  Transactions(true);
-                }}
+                onClick={() => navigate("/dashboard/transactions")}
               >
                 <span>
                   <FaNotesMedical />

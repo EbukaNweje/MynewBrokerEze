@@ -15,6 +15,17 @@ import Markets from "./Pages/Markets/Markets";
 import Plans from "./Pages/Plans/Plans";
 import Contact from "./Pages/Contact/Contact";
 import Terms from "./Pages/Terms/Terms";
+import DashHome from "./Pages/DashHome/DashHome";
+import Deposit from "./Pages/Deposit/Deposit";
+import WithdrawFunds from "./Pages/Withdrawal/WithdrawFunds";
+import ProfitHistory from "./Pages/ProfitHistory/ProfitHistory";
+import Transactions from "./Pages/Transactions/Transactions";
+import TransferFunds from "./Pages/TransferFunds/TransferFunds";
+import Profile from "./Pages/Profile/Profile";
+import TradingPlans from "./Pages/TradingPlans/TradingPlans";
+import MyPlans from "./Pages/MyPlans/MyPlans";
+import Referrals from "./Pages/Referrals/Referrals";
+import DetailPlan from "./Pages/MyPlans/DetailPlan";
 
 const App = () => {
   return (
@@ -35,7 +46,19 @@ const App = () => {
           <Route path="/verify" element={<Verify />} />
           <Route path="/other" element={<Other />} />
           <Route path=":id/payment/:paymentname" element={<Payment />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />}>
+            <Route index element={<DashHome />} />
+            <Route path="deposit" element={<Deposit />} />
+            <Route path="withdraw" element={<WithdrawFunds />} />
+            <Route path="profit-history" element={<ProfitHistory />} />
+            <Route path="transactions" element={<Transactions />} />
+            <Route path="transfer-funds" element={<TransferFunds />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="trading-plans" element={<TradingPlans />} />
+            <Route path="my-plans" element={<MyPlans />} />
+            <Route path="referrals" element={<Referrals />} />
+            <Route path="detail-plan" element={<DetailPlan />} />
+          </Route>
         </Routes>
       </HashRouter>
     </>

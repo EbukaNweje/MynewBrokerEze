@@ -2,10 +2,13 @@ import { FaChartLine, FaDollarSign, FaClock } from "react-icons/fa";
 import "./MyPlans.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const MyPlans = ({ myplans, homechange, handleShowDetailPlan }) => {
-  const { id } = useParams();
+const MyPlans = () => {
+  const navigate = useNavigate();
+  const reduxUser = useSelector((state) => state.persisitedReducer.user);
+  const id = reduxUser?._id || "";
   const [alluserplan, setAlluserplan] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -71,8 +74,7 @@ const MyPlans = ({ myplans, homechange, handleShowDetailPlan }) => {
   };
 
   const handleBuyPlan = () => {
-    homechange(false);
-    myplans(true);
+    navigate("/dashboard/trading-plans");
   };
 
   return (
@@ -136,9 +138,7 @@ const MyPlans = ({ myplans, homechange, handleShowDetailPlan }) => {
                   <div
                     className="MyPlanCard"
                     key={index}
-                    onClick={() =>
-                      handleShowDetailPlan && handleShowDetailPlan(item)
-                    }
+                    onClick={() => navigate("/dashboard/detail-plan")}
                   >
                     <div className="MyPlanCardHeader">
                       <h3>{item?.plan?.planName || "Investment Plan"}</h3>
@@ -192,7 +192,7 @@ const MyPlans = ({ myplans, homechange, handleShowDetailPlan }) => {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleShowDetailPlan && handleShowDetailPlan(item);
+                          navigate("/dashboard/detail-plan");
                         }}
                       >
                         View Details

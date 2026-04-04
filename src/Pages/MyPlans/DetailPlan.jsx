@@ -12,8 +12,10 @@ import { removeSinglePlan } from "../../Components/store/FeaturesSlice";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import Modal from "../../Components/Modal/Modal";
+import { useNavigate } from "react-router-dom";
 
-const DetailPlan = ({ handleShowMyPlans }) => {
+const DetailPlan = () => {
+  const navigate = useNavigate();
   const singlePlans = useSelector(
     (state) => state.persisitedReducer.singlePlan,
   );
@@ -43,7 +45,7 @@ const DetailPlan = ({ handleShowMyPlans }) => {
 
     // Navigate back after 2 seconds
     setTimeout(() => {
-      handleShowMyPlans();
+      navigate("/dashboard/my-plans");
     }, 2000);
   };
 
@@ -57,7 +59,10 @@ const DetailPlan = ({ handleShowMyPlans }) => {
     <>
       <div className="DetailPlanBody">
         <div className="DetailPlanHeader">
-          <button className="BackButton" onClick={() => handleShowMyPlans()}>
+          <button
+            className="BackButton"
+            onClick={() => navigate("/dashboard/my-plans")}
+          >
             <IoMdArrowBack />
             <span>Back to My Plans</span>
           </button>

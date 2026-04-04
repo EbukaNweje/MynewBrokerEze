@@ -19,24 +19,12 @@ import { GoDatabase } from "react-icons/go";
 import { HiMiniUser } from "react-icons/hi2";
 import { FiLogOut } from "react-icons/fi";
 import { useState, useEffect, useRef } from "react";
-// import {Outlet} from "react-router-dom";
+import { Outlet, NavLink } from "react-router-dom";
 import { RiMenu3Fill } from "react-icons/ri";
-import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { swiftUserData } from "../store/FeaturesSlice";
-import DashHome from "../../Pages/DashHome/DashHome";
-import Deposit from "../../Pages/Deposit/Deposit";
-import WithdrawFunds from "../../Pages/Withdrawal/WithdrawFunds";
-import ProfitHistory from "../../Pages/ProfitHistory/ProfitHistory";
-import Transactions from "../../Pages/Transactions/Transactions";
-import Transfer from "../../Pages/TransferFunds/TransferFunds";
-import Profile from "../../Pages/Profile/Profile";
-import TradingPlans from "../../Pages/TradingPlans/TradingPlans";
-import MyPlans from "../../Pages/MyPlans/MyPlans";
-import Referrals from "../../Pages/Referrals/Referrals";
 import ScrollToTop from "../ScrollToTop";
 import Swal from "sweetalert2";
-import DetailPlan from "../../Pages/MyPlans/DetailPlan";
 import { IoIosNotifications } from "react-icons/io";
 import { MdCancel } from "react-icons/md";
 import { FaFilter } from "react-icons/fa";
@@ -140,174 +128,6 @@ const Dashboard = () => {
     }
   };
 
-  const [showHome, setShowHome] = useState(true);
-  const [showdeposit, setShowDeposit] = useState(false);
-  const [showWithdraw, setSHowWithdraw] = useState(false);
-  const [showProfitHistory, setShowProfitHistory] = useState(false);
-  const [showTransaction, setShowTransaction] = useState(false);
-  const [showTransferFunds, setShowTransferFunds] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
-  const [showTradingPlans, setTradingPlans] = useState(false);
-  const [showMyPlans, setShowMyPlans] = useState(false);
-  const [showReferrals, setShowReferrals] = useState(false);
-  const [showDetailPlan, setShowDetailPlan] = useState(false);
-  const [invest, setInvest] = useState(false);
-
-  const handleShowHome = () => {
-    setShowHome(true);
-    setShowDeposit(false);
-    setSHowWithdraw(false);
-    setShowProfitHistory(false);
-    setShowTransaction(false);
-    setShowTransferFunds(false);
-    setShowProfile(false);
-    setTradingPlans(false);
-    setShowMyPlans(false);
-    setShowReferrals(false);
-    setShowDetailPlan(false);
-    handleLinkClick();
-  };
-  const handleShowDeposit = () => {
-    setShowHome(false);
-    setShowDeposit(true);
-    setSHowWithdraw(false);
-    setShowProfitHistory(false);
-    setShowTransaction(false);
-    setShowTransferFunds(false);
-    setShowProfile(false);
-    setTradingPlans(false);
-    setShowMyPlans(false);
-    setShowReferrals(false);
-    setShowDetailPlan(false);
-    handleLinkClick();
-  };
-  const handleShowWithdraw = () => {
-    setShowHome(false);
-    setShowDeposit(false);
-    setSHowWithdraw(true);
-    setShowProfitHistory(false);
-    setShowTransaction(false);
-    setShowTransferFunds(false);
-    setShowProfile(false);
-    setTradingPlans(false);
-    setShowMyPlans(false);
-    setShowReferrals(false);
-    setShowDetailPlan(false);
-    handleLinkClick();
-  };
-  const handleShowProfit = () => {
-    setShowHome(false);
-    setShowDeposit(false);
-    setSHowWithdraw(false);
-    setShowProfitHistory(true);
-    setShowTransaction(false);
-    setShowTransferFunds(false);
-    setShowProfile(false);
-    setTradingPlans(false);
-    setShowMyPlans(false);
-    setShowReferrals(false);
-    setShowDetailPlan(false);
-    handleLinkClick();
-  };
-  const handleShowTransactions = () => {
-    setShowHome(false);
-    setShowDeposit(false);
-    setSHowWithdraw(false);
-    setShowProfitHistory(false);
-    setShowTransaction(true);
-    setShowTransferFunds(false);
-    setShowProfile(false);
-    setTradingPlans(false);
-    setShowMyPlans(false);
-    setShowReferrals(false);
-    setShowDetailPlan(false);
-    handleLinkClick();
-  };
-  const handleShowTransferFunds = () => {
-    setShowHome(false);
-    setShowDeposit(false);
-    setSHowWithdraw(false);
-    setShowProfitHistory(false);
-    setShowTransaction(false);
-    setShowTransferFunds(true);
-    setShowProfile(false);
-    setTradingPlans(false);
-    setShowMyPlans(false);
-    setShowReferrals(false);
-    setShowDetailPlan(false);
-    handleLinkClick();
-  };
-  const handleShowProfile = () => {
-    setShowHome(false);
-    setShowDeposit(false);
-    setSHowWithdraw(false);
-    setShowProfitHistory(false);
-    setShowTransaction(false);
-    setShowTransferFunds(false);
-    setShowProfile(true);
-    setTradingPlans(false);
-    setShowMyPlans(false);
-    setShowReferrals(false);
-    setShowDetailPlan(false);
-    handleLinkClick();
-  };
-  const handleShowTradingPlans = () => {
-    setShowHome(false);
-    setShowDeposit(false);
-    setSHowWithdraw(false);
-    setShowProfitHistory(false);
-    setShowTransaction(false);
-    setShowTransferFunds(false);
-    setShowProfile(false);
-    setTradingPlans(true);
-    setShowMyPlans(false);
-    setShowReferrals(false);
-    setShowDetailPlan(false);
-    handleLinkClick();
-  };
-  const handleShowMyPlans = () => {
-    setShowHome(false);
-    setShowDeposit(false);
-    setSHowWithdraw(false);
-    setShowProfitHistory(false);
-    setShowTransaction(false);
-    setShowTransferFunds(false);
-    setShowProfile(false);
-    setTradingPlans(false);
-    setShowMyPlans(true);
-    setShowReferrals(false);
-    setShowDetailPlan(false);
-    handleLinkClick();
-  };
-  const handleShowReferrals = () => {
-    setShowHome(false);
-    setShowDeposit(false);
-    setSHowWithdraw(false);
-    setShowProfitHistory(false);
-    setShowTransaction(false);
-    setShowTransferFunds(false);
-    setShowProfile(false);
-    setTradingPlans(false);
-    setShowMyPlans(false);
-    setShowReferrals(true);
-    setShowDetailPlan(false);
-    handleLinkClick();
-  };
-  const handleShowDetailPlan = () => {
-    setShowHome(false);
-    setShowDeposit(false);
-    setSHowWithdraw(false);
-    setShowProfitHistory(false);
-    setShowTransaction(false);
-    setShowTransferFunds(false);
-    setShowProfile(false);
-    setTradingPlans(false);
-    setShowMyPlans(false);
-    setShowReferrals(false);
-    setShowDetailPlan(true);
-    // handleLinkClick();
-  };
-
   const Contactus = () => {
     Swal.fire("Contact us on live support");
   };
@@ -320,19 +140,8 @@ const Dashboard = () => {
   const handleInvestmentButton = () => {
     setNotification(false);
     setShowNav(false);
-    // setInvest(!invest);
-    setShowHome(false);
-    setShowDeposit(false);
-    setSHowWithdraw(false);
-    setShowProfitHistory(false);
-    setShowTransaction(false);
-    setShowTransferFunds(false);
-    setShowProfile(false);
-    setTradingPlans(true);
-    setShowMyPlans(false);
-    setShowReferrals(false);
-    setShowDetailPlan(false);
-    // handleLinkClick();
+    // Navigate to trading plans route
+    window.location.href = "/#/dashboard/trading-plans";
   };
 
   return (
@@ -364,128 +173,118 @@ const Dashboard = () => {
               </div>
               <div className="DashboardNavLinks">
                 <div className="DashboardNavLinksRow1">
-                  <button
-                    type="button"
-                    className={`DashboardNavLinksItem ${showHome ? "current" : ""}`}
-                    onClick={handleShowHome}
+                  <NavLink
+                    to="/dashboard"
+                    className="DashboardNavLinksItem"
+                    end
                   >
                     <span>
                       <IoHomeOutline className="DashboardNavlinksIcons" />
                     </span>
                     <span>Home</span>
-                  </button>
-                  <button
-                    type="button"
-                    className={`DashboardNavLinksItem ${showdeposit ? "current" : ""}`}
-                    onClick={handleShowDeposit}
+                  </NavLink>
+                  <NavLink
+                    to="/dashboard/deposit"
+                    className="DashboardNavLinksItem"
                   >
                     <span>
                       <LuHardDriveDownload className="DashboardNavlinksIcons" />
                     </span>
                     <span>Deposit</span>
-                  </button>
+                  </NavLink>
                 </div>
                 <div className="DashboardNavLinksRow2">
-                  <button
-                    type="button"
-                    className={`DashboardNavLinksItem ${showWithdraw ? "current" : ""}`}
-                    onClick={handleShowWithdraw}
+                  <NavLink
+                    to="/dashboard/withdraw"
+                    className="DashboardNavLinksItem"
                   >
                     <span>
                       <FaArrowAltCircleUp className="DashboardNavlinksIcons" />
                     </span>
                     <span>Withdrawal</span>
-                  </button>
-                  <button
-                    type="button"
-                    className={`DashboardNavLinksItem ${showProfitHistory ? "current" : ""}`}
-                    onClick={handleShowProfit}
+                  </NavLink>
+                  <NavLink
+                    to="/dashboard/profit-history"
+                    className="DashboardNavLinksItem"
                   >
                     <span>
                       <FaHistory className="DashboardNavlinksIcons" />
                     </span>
                     <span>Profit History</span>
-                  </button>
+                  </NavLink>
                 </div>
                 <div className="DashboardNavLinksRow3">
-                  <button
-                    type="button"
-                    className={`DashboardNavLinksItem ${showTransaction ? "current" : ""}`}
-                    onClick={handleShowTransactions}
+                  <NavLink
+                    to="/dashboard/transactions"
+                    className="DashboardNavLinksItem"
                   >
                     <span>
                       <BsFillCreditCard2BackFill className="DashboardNavlinksIcons" />
                     </span>
                     <span>Transactions</span>
-                  </button>
-                  <button
-                    type="button"
-                    className={`DashboardNavLinksItem ${showTransferFunds ? "current" : ""}`}
-                    onClick={handleShowTransferFunds}
+                  </NavLink>
+                  <NavLink
+                    to="/dashboard/transfer-funds"
+                    className="DashboardNavLinksItem"
                   >
                     <span>
                       <BiTransfer className="DashboardNavlinksIcons" />
                     </span>
                     <span>Transfer Funds</span>
-                  </button>
+                  </NavLink>
                 </div>
                 <div className="DashboardNavLinksRow4">
-                  <button
-                    type="button"
-                    className={`DashboardNavLinksItem ${showProfile ? "current" : ""}`}
-                    onClick={handleShowProfile}
+                  <NavLink
+                    to="/dashboard/profile"
+                    className="DashboardNavLinksItem"
                   >
                     <span>
                       <FaAddressCard className="DashboardNavlinksIcons" />
                     </span>
                     <span>Profile</span>
-                  </button>
-                  <button
-                    type="button"
-                    className={`DashboardNavLinksItem ${showTradingPlans ? "current" : ""}`}
-                    onClick={handleShowTradingPlans}
+                  </NavLink>
+                  <NavLink
+                    to="/dashboard/trading-plans"
+                    className="DashboardNavLinksItem"
                   >
                     <span>
                       <FaHandHoldingDollar className="DashboardNavlinksIcons" />
                     </span>
                     <span>Trading Plans</span>
-                  </button>
+                  </NavLink>
                 </div>
                 <div className="DashboardNavLinksRow5">
-                  <button
-                    type="button"
-                    className={`DashboardNavLinksItem ${showMyPlans ? "current" : ""}`}
-                    onClick={handleShowMyPlans}
+                  <NavLink
+                    to="/dashboard/my-plans"
+                    className="DashboardNavLinksItem"
                   >
                     <span>
                       <LiaHandHoldingHeartSolid className="DashboardNavlinksIcons" />
                     </span>
                     <span>My Plans</span>
-                  </button>
-                  <button
-                    type="button"
-                    className={`DashboardNavLinksItem ${showReferrals ? "current" : ""}`}
-                    onClick={handleShowReferrals}
+                  </NavLink>
+                  <NavLink
+                    to="/dashboard/referrals"
+                    className="DashboardNavLinksItem"
                   >
                     <span>
                       <LuRepeat2 className="DashboardNavlinksIcons" />
                     </span>
                     <span>Referrals</span>
-                  </button>
+                  </NavLink>
                 </div>
 
                 {userData?.isAdmin ? (
                   <div className="DashboardNavLinksRow5">
-                    <button
-                      type="button"
+                    <NavLink
+                      to="/dashboard/admin"
                       className="DashboardNavLinksItem"
-                      onClick={handleAdmin}
                     >
                       <span>
                         <LiaHandHoldingHeartSolid className="DashboardNavlinksIcons" />
                       </span>
                       <span>Admin</span>
-                    </button>
+                    </NavLink>
                   </div>
                 ) : null}
               </div>
@@ -640,42 +439,7 @@ const Dashboard = () => {
                   </div>
                 </div>
               ) : (
-                <>
-                  {/* <Outlet data = {userData} /> */}
-                  {showHome ? (
-                    <DashHome
-                      homechange={setShowHome}
-                      planchange={setTradingPlans}
-                      Transactions={setShowTransaction}
-                      handleShowDetailPlan={handleShowDetailPlan}
-                    />
-                  ) : showdeposit ? (
-                    <Deposit />
-                  ) : showWithdraw ? (
-                    <WithdrawFunds />
-                  ) : showProfitHistory ? (
-                    <ProfitHistory />
-                  ) : showTransaction ? (
-                    <Transactions />
-                  ) : showTransferFunds ? (
-                    <Transfer />
-                  ) : showProfile ? (
-                    <Profile />
-                  ) : showDetailPlan ? (
-                    <DetailPlan handleShowMyPlans={handleShowMyPlans} />
-                  ) : showTradingPlans ? (
-                    <TradingPlans />
-                  ) : showMyPlans ? (
-                    <MyPlans
-                      myplans={setTradingPlans}
-                      homechange={setShowHome}
-                      data={userData}
-                      handleShowDetailPlan={handleShowDetailPlan}
-                    />
-                  ) : showReferrals ? (
-                    <Referrals />
-                  ) : null}
-                </>
+                <Outlet />
               )}
             </div>
             <div className="DashboardMainFooter">
