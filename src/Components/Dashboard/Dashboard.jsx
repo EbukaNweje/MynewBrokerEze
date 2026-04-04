@@ -23,7 +23,7 @@ import { useState, useEffect, useRef } from "react";
 // import {Outlet} from "react-router-dom";
 import { RiMenu3Fill } from "react-icons/ri";
 import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { swiftUserData } from "../store/FeaturesSlice";
 import DashHome from "../../Pages/DashHome/DashHome";
 import Deposit from "../../Pages/Deposit/Deposit";
@@ -46,32 +46,39 @@ import axios from "axios";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
+  // Select the full user object from Redux, not just idValue
+  const reduxUser = useSelector((state) => state.persisitedReducer.user);
+  const id = reduxUser?._id || "";
 
   const getYear = new Date().getFullYear();
 
-  const { id } = useParams();
-
   const [userData, setUserdata] = useState({});
+  const [userDataLoading, setUserDataLoading] = useState(false);
+  const [plansLoading, setPlansLoading] = useState(false);
 
   const handleGetUser = async () => {
-    fetch(`https://omega-exchange-back-end-one.vercel.app/api/userdata/${id}`, {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        //    console.log(response);
-        setUserdata(response?.data);
-        dispatch(swiftUserData(response.data));
-        localStorage.setItem("UserId", response?.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    setUserDataLoading(true);
+    try {
+      const response = await fetch(
+        `https://mynew-broker-eze-back-end.vercel.app/api/users/userdata/${id}`,
+      );
+      const responseData = await response.json();
+
+      const userData = responseData?.data || responseData;
+
+      setUserdata(userData);
+      dispatch(swiftUserData(userData));
+      localStorage.setItem("UserId", userData?._id || userData?.id || "");
+    } catch (error) {
+    } finally {
+      setUserDataLoading(false);
+    }
   };
 
   useEffect(() => {
     if (id) {
       handleGetUser();
+      getallPlan();
     }
   }, [id]);
 
@@ -112,28 +119,27 @@ const Dashboard = () => {
 
   const handleLogOut = () => {
     localStorage.removeItem("UserId");
-    window.location.href = "https://omega-exchange.vercel.app/";
+    window.location.href = "/#/login";
   };
   const handleAdmin = () => {
     // window.location.href = "https://www.whitebitcrypfield.org/#/admin";
   };
   const [userPlane, setUserPlane] = useState([]);
-  const getallPlan = () => {
-    const url = "https://omega-exchange-back-end-one.vercel.app/api/getallplan";
-    axios
-      .get(url)
-      .then((response) => {
-        // console.log(response.data.data);
-        setUserPlane(response?.data?.data);
-        console.log("gggg", response?.data?.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const getallPlan = async () => {
+    setPlansLoading(true);
+    try {
+      const response = await fetch(
+        "https://mynew-broker-eze-back-end.vercel.app/api/plans/getallplan",
+      );
+      const json = await response.json();
+      setUserPlane(json?.data || []);
+      console.log("gggg", json?.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setPlansLoading(false);
+    }
   };
-  useEffect(() => {
-    getallPlan();
-  }, []);
 
   const [showHome, setShowHome] = useState(true);
   const [showdeposit, setShowDeposit] = useState(false);
@@ -617,40 +623,61 @@ const Dashboard = () => {
               ) : null}
             </div>
             <div className="DashboardMainContent">
-              {/* <Outlet data = {userData} /> */}
-              {showHome ? (
-                <DashHome
-                  homechange={setShowHome}
-                  planchange={setTradingPlans}
-                  Transactions={setShowTransaction}
-                  handleShowDetailPlan={handleShowDetailPlan}
-                />
-              ) : showdeposit ? (
-                <Deposit />
-              ) : showWithdraw ? (
-                <WithdrawFunds />
-              ) : showProfitHistory ? (
-                <ProfitHistory />
-              ) : showTransaction ? (
-                <Transactions />
-              ) : showTransferFunds ? (
-                <Transfer />
-              ) : showProfile ? (
-                <Profile />
-              ) : showDetailPlan ? (
-                <DetailPlan handleShowMyPlans={handleShowMyPlans} />
-              ) : showTradingPlans ? (
-                <TradingPlans />
-              ) : showMyPlans ? (
-                <MyPlans
-                  myplans={setTradingPlans}
-                  homechange={setShowHome}
-                  data={userData}
-                  handleShowDetailPlan={handleShowDetailPlan}
-                />
-              ) : showReferrals ? (
-                <Referrals />
-              ) : null}
+              {userDataLoading || plansLoading ? (
+                <div className="DashboardSkeleton">
+                  <div className="DashboardSkeletonHeader pulse" />
+                  <div className="DashboardSkeletonTop">
+                    <div className="DashboardSkeletonCard pulse" />
+                    <div className="DashboardSkeletonCard pulse" />
+                    <div className="DashboardSkeletonCard pulse" />
+                  </div>
+                  <div className="DashboardSkeletonSection">
+                    <div className="DashboardSkeletonLine pulse" />
+                    <div className="DashboardSkeletonGrid">
+                      <div className="DashboardSkeletonCard pulse" />
+                      <div className="DashboardSkeletonCard pulse" />
+                      <div className="DashboardSkeletonCard pulse" />
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {/* <Outlet data = {userData} /> */}
+                  {showHome ? (
+                    <DashHome
+                      homechange={setShowHome}
+                      planchange={setTradingPlans}
+                      Transactions={setShowTransaction}
+                      handleShowDetailPlan={handleShowDetailPlan}
+                    />
+                  ) : showdeposit ? (
+                    <Deposit />
+                  ) : showWithdraw ? (
+                    <WithdrawFunds />
+                  ) : showProfitHistory ? (
+                    <ProfitHistory />
+                  ) : showTransaction ? (
+                    <Transactions />
+                  ) : showTransferFunds ? (
+                    <Transfer />
+                  ) : showProfile ? (
+                    <Profile />
+                  ) : showDetailPlan ? (
+                    <DetailPlan handleShowMyPlans={handleShowMyPlans} />
+                  ) : showTradingPlans ? (
+                    <TradingPlans />
+                  ) : showMyPlans ? (
+                    <MyPlans
+                      myplans={setTradingPlans}
+                      homechange={setShowHome}
+                      data={userData}
+                      handleShowDetailPlan={handleShowDetailPlan}
+                    />
+                  ) : showReferrals ? (
+                    <Referrals />
+                  ) : null}
+                </>
+              )}
             </div>
             <div className="DashboardMainFooter">
               <p>

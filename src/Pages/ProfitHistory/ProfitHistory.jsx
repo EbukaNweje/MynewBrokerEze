@@ -27,7 +27,7 @@ const ProfitHistory = () => {
     return { totalProfit, totalTransactions, averageProfit, historyArray };
   }, [profitHistory]);
 
-  const url = `https://omegaexchangebackend.onrender.com/api/getprofithistory/${id}`;
+  const url = `https://mynew-broker-eze-back-end.vercel.app/api/getprofithistory/${id}`;
 
   const getProfitHistory = () => {
     setLoading(true);

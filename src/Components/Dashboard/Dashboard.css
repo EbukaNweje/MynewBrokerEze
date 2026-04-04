@@ -465,6 +465,67 @@
   width: 100%;
 }
 
+.DashboardSkeleton {
+  display: grid;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.DashboardSkeletonHeader {
+  width: 40%;
+  height: 24px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.DashboardSkeletonTop {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.DashboardSkeletonSection {
+  display: grid;
+  gap: 1rem;
+}
+
+.DashboardSkeletonGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.DashboardSkeletonCard {
+  min-height: 120px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  position: relative;
+}
+
+.DashboardSkeletonLine {
+  width: 25%;
+  height: 18px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.pulse {
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 /* Footer */
 .DashboardMainFooter {
   background: var(--card-bg);

@@ -29,7 +29,7 @@ const OtherSettings = ({ data }) => {
     emailOnPlanExpiry,
   };
 
-  const updatePreferencesUrl = `https://omega-exchange-back-end-one.vercel.app/api/updatepreferences/${data?._id}`;
+  const updatePreferencesUrl = `https://mynew-broker-eze-back-end.vercel.app/api/updatepreferences/${data?._id}`;
 
   const handleSave = () => {
     setButtonDisabled(true);

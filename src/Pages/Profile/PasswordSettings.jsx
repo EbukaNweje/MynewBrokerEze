@@ -21,7 +21,7 @@ const PasswordSettings = ({ data }) => {
     message: "",
   });
 
-  const updatePasswordUrl = `https://omega-exchange-back-end-one.vercel.app/api/updatepassword/${data?._id}`;
+  const updatePasswordUrl = `https://mynew-broker-eze-back-end.vercel.app/api/updatepassword/${data?._id}`;
 
   const handleUpdatePassword = () => {
     // Validation

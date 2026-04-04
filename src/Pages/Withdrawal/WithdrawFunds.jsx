@@ -57,8 +57,8 @@ const WithdrawFunds = () => {
     { id: "bank", name: "Bank Transfer", route: "BANK" },
   ];
 
-  const url = `https://omegaexchangebackend.onrender.com/api/requestwithdrawcode/${id}`;
-  const urlll = `https://omegaexchangebackend.onrender.com/api/withdraw/${id}`;
+  const url = `https://mynew-broker-eze-back-end.vercel.app/api/requestwithdrawcode/${id}`;
+  const urlll = `https://mynew-broker-eze-back-end.vercel.app/api/withdraw/${id}`;
 
   const handleAmount = (e) => {
     const newAmount = e.target.value;

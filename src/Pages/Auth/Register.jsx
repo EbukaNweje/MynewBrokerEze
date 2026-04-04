@@ -4,12 +4,118 @@ import SwiftLogo from "../../assets/Icon.jpeg";
 import { Link, useNavigate } from "react-router-dom";
 import { CiMail } from "react-icons/ci";
 import { FiKey } from "react-icons/fi";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import {
+  setAuthToken,
+  swiftUserData,
+  setIdValue,
+} from "../../Components/store/FeaturesSlice";
 
 const Register = () => {
   const nav = useNavigate();
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    referralCode: "",
+  });
+  const dispatch = useDispatch();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleRegister = () => {
-    nav("/login");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    setError("");
+  };
+
+  const validateForm = () => {
+    if (
+      !formData.fullName ||
+      !formData.email ||
+      !formData.password ||
+      !formData.confirmPassword
+    ) {
+      setError("All required fields must be completed");
+      return false;
+    }
+
+    if (formData.fullName.trim().length < 2) {
+      setError("Please enter a valid full name");
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError("Please enter a valid email address");
+      return false;
+    }
+
+    if (formData.password.length < 8) {
+      setError("Password must be at least 8 characters long");
+      return false;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch(
+        "https://mynew-broker-eze-back-end.vercel.app/api/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fullName: formData.fullName,
+            email: formData.email,
+            password: formData.password,
+            confirmPassword: formData.confirmPassword,
+            referralCode: formData.referralCode || undefined,
+          }),
+        },
+      );
+
+      const data = await response.json();
+      if (response.ok) {
+        // Store token in Redux state
+
+        if (data.token) {
+          dispatch(setAuthToken(data.token));
+        }
+        if (data.user) {
+          dispatch(swiftUserData(data.user));
+          dispatch(setIdValue(data.user._id || data.user.id));
+        }
+        nav("/login");
+      } else {
+        setError(data.message || "Registration failed. Please try again.");
+      }
+    } catch (err) {
+      setError("Network error. Please check your connection and try again.");
+      console.error("Registration error:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -26,41 +132,113 @@ const Register = () => {
                 Open your account today and start trading with a modern
                 platform.
               </p>
-              <div className="RegisterField">
-                <label>
-                  Email <span>*</span>
-                </label>
-                <div className="RegisterFieldInput">
-                  <span>
-                    <CiMail />
-                  </span>
-                  <input type="email" placeholder="name@example.com" />
+
+              {error && (
+                <div className="RegisterErrorDiv">
+                  <span>{error}</span>
                 </div>
-              </div>
-              <div className="RegisterField">
-                <label>
-                  Password <span>*</span>
-                </label>
-                <div className="RegisterFieldInput">
-                  <span>
-                    <FiKey />
-                  </span>
-                  <input type="password" placeholder="Create password" />
+              )}
+
+              <form onSubmit={handleRegister}>
+                <div className="RegisterField">
+                  <label>
+                    Full Name <span>*</span>
+                  </label>
+                  <div className="RegisterFieldInput">
+                    <span>👤</span>
+                    <input
+                      type="text"
+                      name="fullName"
+                      value={formData.fullName}
+                      onChange={handleChange}
+                      placeholder="Your full name"
+                      disabled={loading}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="RegisterField">
-                <label>
-                  Confirm Password <span>*</span>
-                </label>
-                <div className="RegisterFieldInput">
-                  <span>
-                    <FiKey />
-                  </span>
-                  <input type="password" placeholder="Confirm password" />
+
+                <div className="RegisterField">
+                  <label>
+                    Email <span>*</span>
+                  </label>
+                  <div className="RegisterFieldInput">
+                    <span>
+                      <CiMail />
+                    </span>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="name@example.com"
+                      disabled={loading}
+                    />
+                  </div>
                 </div>
-              </div>
-              <button onClick={handleRegister}>Create account</button>
+
+                <div className="RegisterField">
+                  <label>
+                    Password <span>*</span>
+                  </label>
+                  <div className="RegisterFieldInput">
+                    <span>
+                      <FiKey />
+                    </span>
+                    <input
+                      type="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      placeholder="Create password"
+                      disabled={loading}
+                    />
+                  </div>
+                </div>
+
+                <div className="RegisterField">
+                  <label>
+                    Confirm Password <span>*</span>
+                  </label>
+                  <div className="RegisterFieldInput">
+                    <span>
+                      <FiKey />
+                    </span>
+                    <input
+                      type="password"
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      placeholder="Confirm password"
+                      disabled={loading}
+                    />
+                  </div>
+                </div>
+
+                <div className="RegisterField">
+                  <label>Referral Code (optional)</label>
+                  <div className="RegisterFieldInput">
+                    <span>📌</span>
+                    <input
+                      type="text"
+                      name="referralCode"
+                      value={formData.referralCode}
+                      onChange={handleChange}
+                      placeholder="Enter referral code"
+                      disabled={loading}
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className={loading ? "loading" : ""}
+                >
+                  {loading ? "Creating account..." : "Create account"}
+                </button>
+              </form>
             </div>
+
             <div className="RegisterLeftInfo">
               <p>
                 Already have an account? <Link to="/login">Sign in</Link>

@@ -3,12 +3,68 @@ import LoginImg from "../../assets/Login-img.gif";
 import SwiftLogo from "../../assets/Icon.jpeg";
 import { Link, useNavigate } from "react-router-dom";
 import { CiMail } from "react-icons/ci";
+import { useState } from "react";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSendReset = () => {
-    navigate("/reset-password");
+  const validateEmail = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) {
+      setError("Email is required");
+      return false;
+    }
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address");
+      return false;
+    }
+    return true;
+  };
+
+  const handleSendReset = async (e) => {
+    e.preventDefault();
+
+    if (!validateEmail()) {
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const response = await fetch(
+        "https://mynew-broker-eze-back-end.vercel.app/api/auth/forgot-password",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccess("Reset link sent! Check your email for instructions.");
+        setEmail("");
+        setTimeout(() => {
+          navigate("/reset-password");
+        }, 2000);
+      } else {
+        setError(data.message || "Failed to send reset link. Try again.");
+      }
+    } catch (err) {
+      setError("Network error. Please check your connection and try again.");
+      console.error("Forgot password error:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -25,18 +81,49 @@ const ForgotPassword = () => {
                 Enter your email address below and we’ll send you instructions
                 to reset your password.
               </p>
-              <div className="RegisterField">
-                <label>
-                  Email <span>*</span>
-                </label>
-                <div className="RegisterFieldInput">
-                  <span>
-                    <CiMail />
-                  </span>
-                  <input type="email" placeholder="name@example.com" />
+
+              {error && (
+                <div className="RegisterErrorDiv">
+                  <span>{error}</span>
                 </div>
-              </div>
-              <button onClick={handleSendReset}>Send reset link</button>
+              )}
+
+              {success && (
+                <div className="RegisterSuccessDiv">
+                  <span>{success}</span>
+                </div>
+              )}
+
+              <form onSubmit={handleSendReset}>
+                <div className="RegisterField">
+                  <label>
+                    Email <span>*</span>
+                  </label>
+                  <div className="RegisterFieldInput">
+                    <span>
+                      <CiMail />
+                    </span>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        setError("");
+                      }}
+                      placeholder="name@example.com"
+                      disabled={loading}
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className={loading ? "loading" : ""}
+                >
+                  {loading ? "Sending..." : "Send reset link"}
+                </button>
+              </form>
             </div>
             <div className="RegisterLeftInfo">
               <p>

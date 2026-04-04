@@ -10,7 +10,7 @@ const MyPlans = ({ myplans, homechange, handleShowDetailPlan }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const url = `https://omega-exchange-back-end-one.vercel.app/api/getalluserplan/${id}`;
+  const url = `https://mynew-broker-eze-back-end.vercel.app/api/getalluserplan/${id}`;
 
   const getalluserplan = () => {
     setLoading(true);
@@ -18,7 +18,9 @@ const MyPlans = ({ myplans, homechange, handleShowDetailPlan }) => {
       .get(url)
       .then((res) => {
         console.log("User plans:", res.data);
-        setAlluserplan(Array.isArray(res.data) ? res.data : []);
+        const payload = res.data?.data ?? res.data;
+        const plans = Array.isArray(payload) ? payload : [];
+        setAlluserplan(plans);
         setLoading(false);
       })
       .catch((err) => {
@@ -35,14 +37,16 @@ const MyPlans = ({ myplans, homechange, handleShowDetailPlan }) => {
     }
   }, [id]);
 
+  const safePlans = Array.isArray(alluserplan) ? alluserplan : [];
+
   // Calculate statistics
-  const totalInvested = alluserplan.reduce(
+  const totalInvested = safePlans.reduce(
     (sum, item) => sum + parseFloat(item?.plan?.investment?.amount || 0),
     0,
   );
 
   // More flexible status checking - check multiple possible status values
-  const activePlans = alluserplan.filter((item) => {
+  const activePlans = safePlans.filter((item) => {
     const status = item?.plan?.investment?.status;
     if (!status) return false;
     const statusLower = status.toString().toLowerCase().trim();
@@ -128,7 +132,7 @@ const MyPlans = ({ myplans, homechange, handleShowDetailPlan }) => {
             <div className="MyPlansList">
               <h2>Your Investment Plans</h2>
               <div className="MyPlansGrid">
-                {alluserplan.map((item, index) => (
+                {safePlans.map((item, index) => (
                   <div
                     className="MyPlanCard"
                     key={index}

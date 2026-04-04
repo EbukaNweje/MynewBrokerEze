@@ -3,12 +3,84 @@ import LoginImg from "../../assets/Login-img.gif";
 import SwiftLogo from "../../assets/Icon.jpeg";
 import { Link, useNavigate } from "react-router-dom";
 import { FiKey } from "react-icons/fi";
+import { useState } from "react";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleResetPassword = () => {
-    navigate("/login");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    setError("");
+  };
+
+  const validateForm = () => {
+    if (!formData.newPassword || !formData.confirmPassword) {
+      setError("All password fields are required");
+      return false;
+    }
+
+    if (formData.newPassword.length < 8) {
+      setError("Password must be at least 8 characters long");
+      return false;
+    }
+
+    if (formData.newPassword !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const token = new URLSearchParams(window.location.search).get("token");
+
+      const response = await fetch(
+        "https://mynew-broker-eze-back-end.vercel.app/api/auth/reset-password",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            token: token || "",
+            newPassword: formData.newPassword,
+            confirmPassword: formData.confirmPassword,
+          }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        navigate("/login");
+      } else {
+        setError(data.message || "Password reset failed. Please try again.");
+      }
+    } catch (err) {
+      setError("Network error. Please check your connection and try again.");
+      console.error("Reset password error:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -25,29 +97,60 @@ const ResetPassword = () => {
                 Enter your new password below and confirm it to secure your
                 account.
               </p>
-              <div className="RegisterField">
-                <label>
-                  New password <span>*</span>
-                </label>
-                <div className="RegisterFieldInput">
-                  <span>
-                    <FiKey />
-                  </span>
-                  <input type="password" placeholder="New password" />
+
+              {error && (
+                <div className="RegisterErrorDiv">
+                  <span>{error}</span>
                 </div>
-              </div>
-              <div className="RegisterField">
-                <label>
-                  Confirm password <span>*</span>
-                </label>
-                <div className="RegisterFieldInput">
-                  <span>
-                    <FiKey />
-                  </span>
-                  <input type="password" placeholder="Confirm password" />
+              )}
+
+              <form onSubmit={handleResetPassword}>
+                <div className="RegisterField">
+                  <label>
+                    New password <span>*</span>
+                  </label>
+                  <div className="RegisterFieldInput">
+                    <span>
+                      <FiKey />
+                    </span>
+                    <input
+                      type="password"
+                      name="newPassword"
+                      value={formData.newPassword}
+                      onChange={handleChange}
+                      placeholder="New password"
+                      disabled={loading}
+                    />
+                  </div>
                 </div>
-              </div>
-              <button onClick={handleResetPassword}>Reset password</button>
+
+                <div className="RegisterField">
+                  <label>
+                    Confirm password <span>*</span>
+                  </label>
+                  <div className="RegisterFieldInput">
+                    <span>
+                      <FiKey />
+                    </span>
+                    <input
+                      type="password"
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      placeholder="Confirm password"
+                      disabled={loading}
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className={loading ? "loading" : ""}
+                >
+                  {loading ? "Resetting..." : "Reset password"}
+                </button>
+              </form>
             </div>
             <div className="RegisterLeftInfo">
               <p>

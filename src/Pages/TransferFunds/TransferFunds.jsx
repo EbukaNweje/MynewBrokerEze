@@ -89,7 +89,7 @@ const Transfer = () => {
       return;
     }
 
-    const url = `https://omegaexchangebackend.onrender.com/api/transferfunds/${id}`;
+    const url = `https://mynew-broker-eze-back-end.vercel.app/api/transferfunds/${id}`;
     const data = {
       recipientEmail: recipientEmail,
       amount: parseFloat(amount),

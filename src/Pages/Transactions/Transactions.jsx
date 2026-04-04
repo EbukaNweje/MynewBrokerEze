@@ -18,9 +18,9 @@ const Transactions = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const url = `https://omegaexchangebackend.onrender.com/api/getalldeposit/${id}`;
-  const url2 = `https://omegaexchangebackend.onrender.com/api/getallwithdrawal/${id}`;
-  const url3 = `https://omegaexchangebackend.onrender.com/api/getalltransactions/${id}`;
+  const url = `https://mynew-broker-eze-back-end.vercel.app/api/getalldeposit/${id}`;
+  const url2 = `https://mynew-broker-eze-back-end.vercel.app/api/getallwithdrawal/${id}`;
+  const url3 = `https://mynew-broker-eze-back-end.vercel.app/api/getalltransactions/${id}`;
 
   const getAllDeposit = () => {
     axios

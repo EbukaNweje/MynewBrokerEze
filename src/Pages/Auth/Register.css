@@ -109,6 +109,45 @@
   color: var(--text-muted);
 }
 
+.RegisterErrorDiv {
+  background: rgba(248, 226, 226, 0.84);
+  border: 1px solid rgba(244, 214, 214, 0.9);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+  color: #dc2626;
+  font-size: 0.95rem;
+  text-align: center;
+  animation: slideIn 0.3s ease;
+}
+
+.RegisterSuccessDiv {
+  background: rgba(220, 252, 231, 0.84);
+  border: 1px solid rgba(187, 247, 208, 0.9);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+  color: #059669;
+  font-size: 0.95rem;
+  text-align: center;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.RegisterLeftInputsDiv form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
 .RegisterLeftInputsDiv button {
   width: 100%;
   padding: 1rem;
@@ -123,9 +162,16 @@
   transition: all 0.25s ease;
 }
 
-.RegisterLeftInputsDiv button:hover {
+.RegisterLeftInputsDiv button:hover:not(:disabled) {
   transform: translateY(-2px);
   background: rgba(255, 255, 255, 0.12);
+}
+
+.RegisterLeftInputsDiv button:disabled,
+.RegisterLeftInputsDiv button.loading {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .LoginLeftControlDiv {
@@ -225,6 +271,35 @@
   height: auto;
   display: block;
   border-radius: 20px;
+}
+
+.LoginLoadingOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+}
+
+.LoginLoadingSpinner {
+  width: 72px;
+  height: 72px;
+  border: 8px solid rgba(255, 255, 255, 0.18);
+  border-top-color: #38bdf8;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 968px) {

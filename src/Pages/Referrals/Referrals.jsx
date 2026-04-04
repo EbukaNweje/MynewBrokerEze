@@ -17,7 +17,7 @@ const Referrals = () => {
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
-  const url = `https://omega-exchange-back-end-one.vercel.app/api/getreferrals/${id}`;
+  const url = `https://mynew-broker-eze-back-end.vercel.app/api/getreferrals/${id}`;
 
   const getReferrals = () => {
     setLoading(true);

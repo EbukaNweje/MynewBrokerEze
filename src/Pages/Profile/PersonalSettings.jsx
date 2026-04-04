@@ -18,7 +18,7 @@ const PersonalSettings = ({ data }) => {
   });
 
   const userinfo = { fullName, userName, phoneNumber };
-  const updateuserurl = `https://omega-exchange-back-end-one.vercel.app/api/userdata/${data?._id}`;
+  const updateuserurl = `https://mynew-broker-eze-back-end.vercel.app/api/userdata/${data?._id}`;
 
   const upDateUser = () => {
     // Validation

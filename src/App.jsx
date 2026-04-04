@@ -35,7 +35,7 @@ const App = () => {
           <Route path="/verify" element={<Verify />} />
           <Route path="/other" element={<Other />} />
           <Route path=":id/payment/:paymentname" element={<Payment />} />
-          <Route path="/:id" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </HashRouter>
     </>

@@ -8,7 +8,6 @@ import vid from "../../assets/crypt.mp4";
 import { FaArrowRight, FaChevronRight } from "react-icons/fa6";
 import { getSinglePlan } from "../../Components/store/FeaturesSlice";
 import "../MyPlans/MyPlans.css";
-import { useParams } from "react-router";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
 const DashHome = ({
@@ -19,7 +18,9 @@ const DashHome = ({
 }) => {
   const [exchangeRate, setExchangeRate] = useState(null);
   const userData = useSelector((state) => state.persisitedReducer.user);
-  // console.log(userData);
+  const referralLink = useSelector(
+    (state) => state.persisitedReducer.referralLink,
+  );
 
   useEffect(() => {
     // Fetch the current exchange rate from an API (replace with a reliable API)
@@ -50,22 +51,27 @@ const DashHome = ({
   const roundedNumber7 = parseFloat(bitcoinValue7.toFixed(8));
   // console.log("this is it", roundedNumber);
 
-  const allPlans = useSelector((state) => state.persisitedReducer.plans);
-
-  // console.log(allPlans);
   const dispatch = useDispatch();
+  const reduxUser = useSelector((state) => state.persisitedReducer.user);
+  const id = reduxUser?._id || "";
+
+  // Validate that we have a valid user ID before making API calls
+  if (!id) {
+    console.warn(
+      "⚠️ WARNING: User ID is empty! User data from Redux may not have loaded yet.",
+    );
+  }
 
   const handleViewMoreSinglePlan = (item) => {
     dispatch(getSinglePlan(item));
     handleShowDetailPlan();
   };
 
-  const { id } = useParams();
   const [others, setOthers] = useState();
   const [alluserplan, setAlluserplan] = useState();
 
-  const url3 = `https://omega-exchange-back-end-one.vercel.app/api/getalltransactions/${id}`;
-  const url4 = `https://omega-exchange-back-end-one.vercel.app/api/getalluserplan/${id}`;
+  const url3 = `https://mynew-broker-eze-back-end.vercel.app/api/users/getalltransactions/${id}`;
+  const url4 = `https://mynew-broker-eze-back-end.vercel.app/api/users/getalluserplan/${id}`;
 
   const getAllOthers = () => {
     axios
@@ -82,7 +88,6 @@ const DashHome = ({
     axios
       .get(url4)
       .then((res) => {
-        console.log("getalluserplan", res.data);
         setAlluserplan(res.data);
       })
       .catch((err) => {
@@ -91,9 +96,14 @@ const DashHome = ({
   };
 
   useEffect(() => {
-    getAllOthers();
-    getalluserplan();
-  }, []);
+    if (id) {
+      getAllOthers();
+      getalluserplan();
+    } else {
+      setOthers(null);
+      setAlluserplan(null);
+    }
+  }, [id]);
   // const calculateTotalInvestment = (array) => {
   //     if (array.length === 0) {
   //         return 0;
@@ -113,7 +123,7 @@ const DashHome = ({
   // const roundedNumber7 = parseFloat(bitcoinValue7.toFixed(8));
 
   const [state, setState] = useState({
-    value: "https://omega-exchange.vercel.app/",
+    value: referralLink,
     copied: false,
   });
 
