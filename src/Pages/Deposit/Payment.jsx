@@ -1,0 +1,438 @@
+import { FaCopy, FaWallet, FaUniversity } from "react-icons/fa";
+import { SiCashapp, SiPaypal, SiBitcoin } from "react-icons/si";
+import "./Payment.css";
+import { useParams } from "react-router";
+import { useEffect, useState } from "react";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import axios from "axios";
+import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { updateDepositData } from "../../Components/store/FeaturesSlice";
+import Modal from "../../Components/Modal/Modal";
+
+const Payment = () => {
+  const { paymentname, id } = useParams();
+  const [pay, setpay] = useState(false);
+  const [isButtonDisabled, setButtonDisabled] = useState(false);
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const amount = JSON.parse(localStorage.getItem("amount"));
+
+  // Modal states
+  const [showModal, setShowModal] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    type: "success",
+    title: "",
+    message: "",
+  });
+
+  const nav = useNavigate();
+  const dispatch = useDispatch();
+
+  // Payment method configurations - UPDATE YOUR ADDRESSES HERE
+  const paymentConfig = {
+    BTC: {
+      name: "Bitcoin (BTC)",
+      icon: <SiBitcoin />,
+      address: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
+      network: "Bitcoin Network",
+      instructions: [
+        "Copy the Bitcoin address below",
+        "Open your Bitcoin wallet",
+        "Send the exact amount to the address",
+        "Upload payment proof after transaction",
+        "Wait for confirmation (usually 10-30 minutes)",
+      ],
+    },
+    ETH: {
+      name: "Ethereum (ETH)",
+      icon: <SiBitcoin />,
+      address: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+      network: "Ethereum Network (ERC20)",
+      instructions: [
+        "Copy the Ethereum address below",
+        "Open your Ethereum wallet",
+        "Send the exact amount to the address",
+        "Upload payment proof after transaction",
+        "Wait for confirmation (usually 2-5 minutes)",
+      ],
+    },
+    "USDT-ERC20": {
+      name: "USDT (ERC20)",
+      icon: <SiBitcoin />,
+      address: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+      network: "Ethereum Network (ERC20)",
+      instructions: [
+        "Copy the USDT address below",
+        "Open your wallet and select USDT (ERC20)",
+        "Send the exact amount to the address",
+        "Upload payment proof after transaction",
+        "Wait for confirmation (usually 2-5 minutes)",
+      ],
+    },
+    "USDT-TRC20": {
+      name: "USDT (TRC20)",
+      icon: <SiBitcoin />,
+      address: "TXYZupypcsuWGkWJwjz6zQKqL4qKRzPmK7",
+      network: "Tron Network (TRC20)",
+      instructions: [
+        "Copy the USDT address below",
+        "Open your wallet and select USDT (TRC20)",
+        "Send the exact amount to the address",
+        "Upload payment proof after transaction",
+        "Wait for confirmation (usually 1-3 minutes)",
+      ],
+    },
+    "USDT-BEP20": {
+      name: "USDT (BEP20)",
+      icon: <SiBitcoin />,
+      address: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+      network: "Binance Smart Chain (BEP20)",
+      instructions: [
+        "Copy the USDT address below",
+        "Open your wallet and select USDT (BEP20)",
+        "Send the exact amount to the address",
+        "Upload payment proof after transaction",
+        "Wait for confirmation (usually 1-3 minutes)",
+      ],
+    },
+    BNB: {
+      name: "Binance Coin (BNB)",
+      icon: <SiBitcoin />,
+      address: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+      network: "Binance Smart Chain (BEP20)",
+      instructions: [
+        "Copy the BNB address below",
+        "Open your Binance or BNB wallet",
+        "Send the exact amount to the address",
+        "Upload payment proof after transaction",
+        "Wait for confirmation (usually 1-3 minutes)",
+      ],
+    },
+    SOL: {
+      name: "Solana (SOL)",
+      icon: <SiBitcoin />,
+      address: "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU",
+      network: "Solana Network",
+      instructions: [
+        "Copy the Solana address below",
+        "Open your Solana wallet",
+        "Send the exact amount to the address",
+        "Upload payment proof after transaction",
+        "Wait for confirmation (usually 30 seconds - 2 minutes)",
+      ],
+    },
+    XRP: {
+      name: "Ripple (XRP)",
+      icon: <SiBitcoin />,
+      address: "rN7n7otQDd6FczFgLdlqtyMVrn3HMfXEEk",
+      network: "Ripple Network",
+      instructions: [
+        "Copy the XRP address below",
+        "Open your XRP wallet",
+        "Send the exact amount to the address",
+        "Include the destination tag if required",
+        "Upload payment proof after transaction",
+        "Wait for confirmation (usually 3-5 seconds)",
+      ],
+    },
+    TRX: {
+      name: "Tron (TRX)",
+      icon: <SiBitcoin />,
+      address: "TXYZupypcsuWGkWJwjz6zQKqL4qKRzPmK7",
+      network: "Tron Network",
+      instructions: [
+        "Copy the Tron address below",
+        "Open your Tron wallet",
+        "Send the exact amount to the address",
+        "Upload payment proof after transaction",
+        "Wait for confirmation (usually 1-3 minutes)",
+      ],
+    },
+    CASHAPP: {
+      name: "Cash App",
+      icon: <SiCashapp />,
+      address: "$YourCashAppTag",
+      network: "Cash App",
+      instructions: [
+        "Copy the Cash App tag below",
+        "Open your Cash App",
+        "Send the exact amount to the tag",
+        "Upload payment screenshot",
+        "Payment will be confirmed within 5-10 minutes",
+      ],
+    },
+    PAYPAL: {
+      name: "PayPal",
+      icon: <SiPaypal />,
+      address: "your-email@example.com",
+      network: "PayPal",
+      instructions: [
+        "Copy the PayPal email below",
+        "Open your PayPal account",
+        "Send money to the email address",
+        "Upload payment confirmation",
+        "Payment will be verified within 10-15 minutes",
+      ],
+    },
+    BANK: {
+      name: "Bank Transfer",
+      icon: <FaUniversity />,
+      address:
+        "Account: 1234567890 | Bank: Your Bank Name | Routing: 123456789",
+      network: "Bank Transfer",
+      instructions: [
+        "Use the bank details below",
+        "Make a transfer from your bank",
+        "Include your user ID in the reference",
+        "Upload transfer receipt",
+        "Bank transfers may take 1-3 business days",
+      ],
+    },
+  };
+
+  const currentPayment = paymentConfig[paymentname] || paymentConfig.BTC;
+
+  const depositDatas = {
+    amount: amount,
+    paymentMode: paymentname,
+    status: "pending",
+    dateCreated: new Date().toDateString(),
+  };
+
+  const [state, setState] = useState({
+    value: currentPayment.address,
+    copied: false,
+  });
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setUploadedFile(file);
+      console.log("File uploaded:", file.name);
+    }
+  };
+
+  const url = `https://omegaexchangebackend.onrender.com/api/sendpayment/${id}`;
+  const url2 = `https://omega-exchange-back-end-one.vercel.app/api/deposit/${id}`;
+
+  const data = {
+    amount: amount,
+  };
+
+  const data2 = {
+    amount: amount,
+    coin: paymentname,
+  };
+
+  const SendPaymentToAdmin = () => {
+    axios
+      .post(url2, data2)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const payNow = () => {
+    if (!uploadedFile) {
+      setModalConfig({
+        type: "error",
+        title: "Payment Proof Required",
+        message: "Please upload payment proof before submitting.",
+      });
+      setShowModal(true);
+      return;
+    }
+
+    setButtonDisabled(true);
+    axios
+      .post(url, data)
+      .then((res) => {
+        SendPaymentToAdmin();
+        console.log(res);
+        setpay(true);
+        setModalConfig({
+          type: "success",
+          title: "Payment Submitted Successfully!",
+          message:
+            "Your deposit is being processed. You will be notified once it's confirmed.",
+        });
+        setShowModal(true);
+
+        // Redirect after 2 seconds
+        setTimeout(() => {
+          nav(`/${id}`);
+          dispatch(updateDepositData(depositDatas));
+        }, 2000);
+      })
+      .catch((err) => {
+        console.log(err);
+        setButtonDisabled(false);
+        setModalConfig({
+          type: "error",
+          title: "Payment Submission Failed",
+          message:
+            "Unable to submit payment. Please try again or contact support.",
+        });
+        setShowModal(true);
+      });
+  };
+
+  return (
+    <>
+      <div className="PaymentBody">
+        <div className="PaymentContainer">
+          <div className="PaymentHeader">
+            <h1>Complete Your Payment</h1>
+            <p>Follow the instructions below to complete your deposit</p>
+          </div>
+
+          <div className="PaymentContent">
+            <div className="PaymentMethodInfo">
+              <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>
+                {currentPayment.icon}
+              </div>
+              <h3>{currentPayment.name}</h3>
+              <p>Selected Payment Method</p>
+            </div>
+
+            <div className="PaymentAmountCard">
+              <h4>Amount to Deposit</h4>
+              <h2>${amount}</h2>
+            </div>
+
+            <div className="PaymentWalletSection">
+              <h3>Payment Details</h3>
+              <div className="PaymentWalletAddress">
+                <input type="text" value={state.value} readOnly />
+                <CopyToClipboard
+                  text={state.value}
+                  onCopy={() => {
+                    setState({ ...state, copied: true });
+                    setTimeout(
+                      () => setState({ ...state, copied: false }),
+                      2000,
+                    );
+                  }}
+                >
+                  <button>
+                    <FaCopy /> {state.copied ? "Copied!" : "Copy"}
+                  </button>
+                </CopyToClipboard>
+              </div>
+              <p
+                style={{
+                  fontSize: "0.9rem",
+                  color: "var(--text-secondary)",
+                  marginTop: "0.5rem",
+                }}
+              >
+                Network Type:{" "}
+                <span style={{ fontWeight: "600" }}>
+                  {currentPayment.network}
+                </span>
+              </p>
+            </div>
+
+            <div className="PaymentInstructions">
+              <h4>Payment Instructions</h4>
+              <ol>
+                {currentPayment.instructions.map((instruction, index) => (
+                  <li key={index}>{instruction}</li>
+                ))}
+              </ol>
+            </div>
+
+            <div className="PaymentUploadSection">
+              <h3>Upload Payment Proof</h3>
+              <label htmlFor="file-upload" className="PaymentUploadBox">
+                <FaWallet style={{ fontSize: "3rem" }} />
+                <p>
+                  {uploadedFile
+                    ? `Selected: ${uploadedFile.name}`
+                    : "Click to upload payment proof"}
+                </p>
+                <p style={{ fontSize: "0.85rem", color: "var(--text-muted)" }}>
+                  Supported formats: JPG, PNG, PDF (Max 5MB)
+                </p>
+                <input
+                  id="file-upload"
+                  type="file"
+                  accept="image/*,.pdf"
+                  onChange={handleFileUpload}
+                />
+              </label>
+            </div>
+
+            <div className="PaymentActions">
+              <button
+                className="secondary"
+                onClick={() => nav(`/${id}`)}
+                disabled={isButtonDisabled}
+              >
+                Cancel
+              </button>
+              <button onClick={payNow} disabled={isButtonDisabled}>
+                {isButtonDisabled ? "Submitting..." : "Submit Payment"}
+              </button>
+            </div>
+
+            <div className="PaymentWarning">
+              <span style={{ fontSize: "1.5rem" }}>⚠️</span>
+              <p>
+                Please ensure you send the exact amount to avoid delays in
+                processing. Your deposit will be credited after verification
+                (usually within 10-30 minutes).
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {pay && (
+          <div className="SuccessPaid">
+            <div className="PayCon">
+              <h3>Payment Submitted Successfully!</h3>
+              <p
+                style={{
+                  marginBottom: "1.5rem",
+                  color: "var(--text-secondary)",
+                }}
+              >
+                Your deposit is being processed. You will be notified once it's
+                confirmed.
+              </p>
+              <button
+                onClick={() => {
+                  setpay(false);
+                  nav(`/${id}`);
+                  dispatch(updateDepositData(depositDatas));
+                }}
+              >
+                Return to Dashboard
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Modal */}
+        <Modal
+          isOpen={showModal}
+          onClose={() => {
+            setShowModal(false);
+            if (modalConfig.type === "success") {
+              nav(`/${id}`);
+              dispatch(updateDepositData(depositDatas));
+            }
+          }}
+          type={modalConfig.type}
+          title={modalConfig.title}
+          message={modalConfig.message}
+        />
+      </div>
+    </>
+  );
+};
+
+export default Payment;
