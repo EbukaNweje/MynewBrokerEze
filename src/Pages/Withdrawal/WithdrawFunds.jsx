@@ -1,14 +1,13 @@
 import "./WithdrawFunds.css";
 import { IoMdMail } from "react-icons/io";
 import axios from "axios";
-import { useParams } from "react-router";
-import { useState, useCallback } from "react";
-import { useSelector } from "react-redux";
+import { useState, useCallback, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { swiftUserData } from "../../Components/store/FeaturesSlice";
 import Modal from "../../Components/Modal/Modal";
 import VerificationModal from "../../Components/Modal/VerificationModal";
 
 const WithdrawFunds = () => {
-  const { id } = useParams();
   const [amount, setAmount] = useState("");
   const [amountError, setAmountError] = useState("");
   const [withdrawCodes, setWithdrawCodes] = useState("");
@@ -32,6 +31,21 @@ const WithdrawFunds = () => {
   const [verificationData, setVerificationData] = useState(null);
 
   const userData = useSelector((state) => state.persisitedReducer.user);
+  const id = userData?._id || "";
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!id) return;
+    axios
+      .get(
+        `https://mynew-broker-eze-back-end.vercel.app/api/users/userdata/${id}`,
+      )
+      .then((res) => {
+        const fresh = res.data?.data || res.data;
+        dispatch(swiftUserData(fresh));
+      })
+      .catch(() => {});
+  }, [id]);
 
   // Define withdrawal methods (same as deposit)
   const withdrawalMethods = [
@@ -57,22 +71,13 @@ const WithdrawFunds = () => {
     { id: "bank", name: "Bank Transfer", route: "BANK" },
   ];
 
-  const url = `https://mynew-broker-eze-back-end.vercel.app/api/requestwithdrawcode/${id}`;
-  const urlll = `https://mynew-broker-eze-back-end.vercel.app/api/withdraw/${id}`;
+  const url = `https://mynew-broker-eze-back-end.vercel.app/api/users/requestwithdrawcode/${id}`;
+  const urlll = `https://mynew-broker-eze-back-end.vercel.app/api/withdrawals/withdraw/${id}`;
 
   const handleAmount = (e) => {
     const newAmount = e.target.value;
     setAmount(newAmount);
-
-    if (newAmount.trim() === "" || newAmount === "0" || newAmount === "0.00") {
-      setAmountError("Amount is required");
-    } else if (parseFloat(newAmount) <= 0) {
-      setAmountError("Amount must be greater than 0");
-    } else if (parseFloat(newAmount) > parseFloat(userData?.accountBalance)) {
-      setAmountError("Insufficient balance");
-    } else {
-      setAmountError("");
-    }
+    setAmountError("");
   };
 
   const handleWithdrawCodes = (e) => {
@@ -145,17 +150,17 @@ const WithdrawFunds = () => {
     }
 
     if (parseFloat(amount) > parseFloat(userData?.accountBalance)) {
-      setAmountError("Insufficient balance");
+      setModalConfig({
+        type: "error",
+        title: "Insufficient Balance",
+        message: `Your available balance is $${userData?.accountBalance || "0.00"}. Please enter a lower amount.`,
+      });
+      setShowModal(true);
       return;
     }
 
     if (!withdrawCodes) {
       setWithdrawCodesError("Please enter OTP");
-      return;
-    }
-
-    if (userData.withdrawCode !== withdrawCodes) {
-      setWithdrawCodesError("Invalid OTP");
       return;
     }
 
@@ -190,12 +195,14 @@ const WithdrawFunds = () => {
       coin: selectedPaymentMethod,
       ssn: data.ssn,
       driversLicense: data.driversLicense,
+      withdrawCode: withdrawCodes,
     };
 
     setClickMe(true);
     axios
       .post(urlll, datas)
       .then((res) => {
+        console.log("this is it", res);
         console.log(res.data.message);
         setClickMe(false);
         setModalConfig({

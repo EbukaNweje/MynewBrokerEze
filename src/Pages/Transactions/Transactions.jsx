@@ -80,7 +80,7 @@ const Transactions = () => {
 
   const getStatusClass = (status) => {
     const statusLower = status?.toLowerCase() || "";
-    if (statusLower.includes("success") || statusLower.includes("completed")) {
+    if (statusLower.includes("success") || statusLower.includes("confirmed")) {
       return "status-success";
     } else if (statusLower.includes("pending")) {
       return "status-pending";
