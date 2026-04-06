@@ -153,7 +153,7 @@ const WithdrawFunds = () => {
       setModalConfig({
         type: "error",
         title: "Insufficient Balance",
-        message: `Your available balance is $${userData?.accountBalance || "0.00"}. Please enter a lower amount.`,
+        message: `Your available balance is $${(parseFloat(userData?.accountBalance) || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}. Please enter a lower amount.`,
       });
       setShowModal(true);
       return;
@@ -266,7 +266,11 @@ const WithdrawFunds = () => {
               />
               {amountError && <p className="error-text">{amountError}</p>}
               <p className="info-text">
-                Available Balance: ${userData?.accountBalance || "0.00"}
+                Available Balance: $
+                {(parseFloat(userData?.accountBalance) || 0).toLocaleString(
+                  "en-US",
+                  { minimumFractionDigits: 2, maximumFractionDigits: 2 },
+                )}
               </p>
             </div>
 
@@ -416,7 +420,13 @@ const WithdrawFunds = () => {
               </div>
               <div className="summary-item">
                 <span>Available Balance:</span>
-                <strong>${userData?.accountBalance || "0.00"}</strong>
+                <strong>
+                  $
+                  {(parseFloat(userData?.accountBalance) || 0).toLocaleString(
+                    "en-US",
+                    { minimumFractionDigits: 2, maximumFractionDigits: 2 },
+                  )}
+                </strong>
               </div>
             </div>
 

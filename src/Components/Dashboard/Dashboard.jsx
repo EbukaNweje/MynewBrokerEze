@@ -215,7 +215,14 @@ const Dashboard = () => {
                   <p>online</p>
                 </div>
                 <div className="DashboardNavAccountViewBalance">
-                  <GoDatabase /> <span>$&nbsp;{userData?.accountBalance}</span>
+                  <GoDatabase />{" "}
+                  <span>
+                    $&nbsp;
+                    {(parseFloat(userData?.accountBalance) || 0).toLocaleString(
+                      "en-US",
+                      { minimumFractionDigits: 2, maximumFractionDigits: 2 },
+                    )}
+                  </span>
                 </div>
               </div>
               <div className="DashboardNavLinks">

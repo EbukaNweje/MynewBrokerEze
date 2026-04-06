@@ -19,6 +19,14 @@ const DashHome = () => {
     (state) => state.persisitedReducer.referralLink,
   );
 
+  const formatAmount = (value) => {
+    const num = parseFloat(value) || 0;
+    return num.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
+
   useEffect(() => {
     // Fetch the current exchange rate from an API (replace with a reliable API)
     axios
@@ -149,10 +157,7 @@ const DashHome = () => {
                 <div className="DashHomeMainContentAccSummaryRow1Box">
                   <div className="DashHomeMainContentAccSummaryRow1BoxL">
                     <h4>Account Balance</h4>
-                    <h3>
-                      $ &nbsp;{userData?.accountBalance}
-                      .00
-                    </h3>
+                    <h3>$ &nbsp;{formatAmount(userData?.accountBalance)}</h3>
                     <span style={{ fontWeight: "700" }}>
                       {/* {roundedNumber}BTC */}
                     </span>
@@ -165,7 +170,7 @@ const DashHome = () => {
                 <div className="DashHomeMainContentAccSummaryRow1Box">
                   <div className="DashHomeMainContentAccSummaryRow1BoxL">
                     <h4>Total Profit</h4>
-                    <h3>$ &nbsp;{userData?.totalProfit}.00</h3>
+                    <h3>$ &nbsp;{formatAmount(userData?.totalProfit)}</h3>
                     <span style={{ fontWeight: "700" }}>
                       {/* {roundedNumber2}BTC */}
                     </span>
@@ -177,7 +182,7 @@ const DashHome = () => {
                 <div className="DashHomeMainContentAccSummaryRow1Box">
                   <div className="DashHomeMainContentAccSummaryRow1BoxL">
                     <h4>Bonus</h4>
-                    <h3>$ &nbsp;{userData?.bonus}.00</h3>
+                    <h3>$ &nbsp;{formatAmount(userData?.bonus)}</h3>
                     <span style={{ fontWeight: "700" }}>
                       {/* {roundedNumber3}BTC */}
                     </span>
@@ -190,7 +195,7 @@ const DashHome = () => {
                 <div className="DashHomeMainContentAccSummaryRow2Box">
                   <div className="DashHomeMainContentAccSummaryRow2BoxL">
                     <h4>Referral Bonus</h4>
-                    <h3>$ &nbsp;{userData?.ref}.00</h3>
+                    <h3>$ &nbsp;{formatAmount(userData?.ref)}</h3>
                     <span style={{ fontWeight: "700" }}>
                       {/* {roundedNumber4}BTC */}
                     </span>
@@ -202,7 +207,7 @@ const DashHome = () => {
                 <div className="DashHomeMainContentAccSummaryRow2Box">
                   <div className="DashHomeMainContentAccSummaryRow2BoxL">
                     <h4>Total Deposits</h4>
-                    <h3>$ &nbsp;{userData?.totalDeposit}.00</h3>
+                    <h3>$ &nbsp;{formatAmount(userData?.totalDeposit)}</h3>
                     <span style={{ fontWeight: "700" }}>
                       {/* {roundedNumber5}BTC */}
                     </span>
@@ -214,10 +219,7 @@ const DashHome = () => {
                 <div className="DashHomeMainContentAccSummaryRow2Box">
                   <div className="DashHomeMainContentAccSummaryRow2BoxL">
                     <h4>Total Widthdrawal</h4>
-                    <h3>
-                      $ &nbsp;{userData?.totalWithdrawal}
-                      .00
-                    </h3>
+                    <h3>$ &nbsp;{formatAmount(userData?.totalWithdrawal)}</h3>
                     <span style={{ fontWeight: "700" }}>
                       {/* {roundedNumber6}BTC */}
                     </span>
@@ -229,10 +231,7 @@ const DashHome = () => {
                 <div className="DashHomeMainContentAccSummaryRow2Box">
                   <div className="DashHomeMainContentAccSummaryRow2BoxL">
                     <h4>Total Investment</h4>
-                    <h3>
-                      $ {userData?.totalInvestment}
-                      .00
-                    </h3>
+                    <h3>$ &nbsp;{formatAmount(userData?.totalInvestment)}</h3>
                     <span style={{ fontWeight: "700" }}>
                       {/* {roundedNumber7}BTC */}
                     </span>
