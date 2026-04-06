@@ -456,26 +456,31 @@ const Dashboard = () => {
                           <h4>{notificationsError}</h4>
                         </div>
                       ) : notifications.length > 0 ? (
-                        notifications.map((item, index) => (
-                          <div
-                            className="notification_card"
-                            key={index}
-                            onClick={() => {
-                              handleInvestmentButton();
-                            }}
-                          >
-                            <h4>Notification</h4>
-                            <p>
-                              {item?.msg || item?.message || item?.title || ""}
-                            </p>
-                            <p>
-                              {item?.Date ||
-                                item?.createdAt ||
-                                item?.date ||
-                                ""}
-                            </p>
-                          </div>
-                        ))
+                        [...notifications]
+                          .sort((a, b) => new Date(b.Date) - new Date(a.Date))
+                          .map((item, index) => (
+                            <div
+                              className="notification_card"
+                              key={index}
+                              onClick={() => {
+                                handleInvestmentButton();
+                              }}
+                            >
+                              <h4>Notification</h4>
+                              <p>
+                                {item?.msg ||
+                                  item?.message ||
+                                  item?.title ||
+                                  ""}
+                              </p>
+                              <p>
+                                {item?.Date ||
+                                  item?.createdAt ||
+                                  item?.date ||
+                                  ""}
+                              </p>
+                            </div>
+                          ))
                       ) : (
                         <div className="no_notification">
                           <h4>No Notifications</h4>
