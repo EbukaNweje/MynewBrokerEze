@@ -151,7 +151,13 @@ const Transfer = () => {
                 <IoWalletOutline />
               </div>
               <div className="TransferBalanceInfo">
-                <h3>${userData?.accountBalance || "0.00"}</h3>
+                <h3>
+                  $
+                  {(parseFloat(userData?.accountBalance) || 0).toLocaleString(
+                    "en-US",
+                    { minimumFractionDigits: 2, maximumFractionDigits: 2 },
+                  )}
+                </h3>
                 <p>Your Account Balance</p>
               </div>
             </div>
@@ -186,7 +192,11 @@ const Transfer = () => {
                 />
                 {amountError && <p className="error">{amountError}</p>}
                 <p className="info-text">
-                  Available Balance: ${userData?.accountBalance || "0.00"}
+                  Available Balance: $
+                  {(parseFloat(userData?.accountBalance) || 0).toLocaleString(
+                    "en-US",
+                    { minimumFractionDigits: 2, maximumFractionDigits: 2 },
+                  )}
                 </p>
               </div>
 

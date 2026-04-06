@@ -281,7 +281,16 @@ const TradingPlans = () => {
                 <div className="TradingPlansLeftBoxDItem">
                   <IoWalletOutline className="IoWalletOutline" />
                   <p>
-                    Account Balance <span>${userData?.accountBalance}</span>
+                    Account Balance{" "}
+                    <span>
+                      $
+                      {(
+                        parseFloat(userData?.accountBalance) || 0
+                      ).toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                    </span>
                   </p>
                 </div>
               </div>
