@@ -173,20 +173,34 @@ const Transactions = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {allDeposit.map((data, index) => (
-                            <tr key={index}>
-                              <td className="amount">${data.amount}</td>
-                              <td>{data.coin}</td>
-                              <td>
-                                <span
-                                  className={`status ${getStatusClass(data.status)}`}
-                                >
-                                  {data.status}
-                                </span>
-                              </td>
-                              <td>{data.depositDate}</td>
-                            </tr>
-                          ))}
+                          {[...allDeposit]
+                            .sort(
+                              (a, b) =>
+                                new Date(b.depositDate) -
+                                new Date(a.depositDate),
+                            )
+                            .map((data, index) => (
+                              <tr key={index}>
+                                <td className="amount">
+                                  $
+                                  {(
+                                    parseFloat(data.amount) || 0
+                                  ).toLocaleString("en-US", {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  })}
+                                </td>
+                                <td>{data.coin}</td>
+                                <td>
+                                  <span
+                                    className={`status ${getStatusClass(data.status)}`}
+                                  >
+                                    {data.status}
+                                  </span>
+                                </td>
+                                <td>{data.depositDate}</td>
+                              </tr>
+                            ))}
                         </tbody>
                       </table>
                     </div>
@@ -212,23 +226,37 @@ const Transactions = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {allWithdrawal.map((props, index) => (
-                            <tr key={index}>
-                              <td className="amount">${props.amount}</td>
-                              <td className="wallet-address">
-                                {props.walletAddress?.substring(0, 20)}...
-                              </td>
-                              <td>{props.coin}</td>
-                              <td>
-                                <span
-                                  className={`status ${getStatusClass(props.status)}`}
-                                >
-                                  {props.status}
-                                </span>
-                              </td>
-                              <td>{props.withdrawDate}</td>
-                            </tr>
-                          ))}
+                          {[...allWithdrawal]
+                            .sort(
+                              (a, b) =>
+                                new Date(b.withdrawDate) -
+                                new Date(a.withdrawDate),
+                            )
+                            .map((props, index) => (
+                              <tr key={index}>
+                                <td className="amount">
+                                  $
+                                  {(
+                                    parseFloat(props.amount) || 0
+                                  ).toLocaleString("en-US", {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  })}
+                                </td>
+                                <td className="wallet-address">
+                                  {props.walletAddress?.substring(0, 20)}...
+                                </td>
+                                <td>{props.coin}</td>
+                                <td>
+                                  <span
+                                    className={`status ${getStatusClass(props.status)}`}
+                                  >
+                                    {props.status}
+                                  </span>
+                                </td>
+                                <td>{props.withdrawDate}</td>
+                              </tr>
+                            ))}
                         </tbody>
                       </table>
                     </div>
@@ -253,20 +281,30 @@ const Transactions = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {others.map((props, index) => (
-                            <tr key={index}>
-                              <td className="amount">${props.amount}</td>
-                              <td>{props.transactionType}</td>
-                              <td>
-                                <span
-                                  className={`status ${getStatusClass(props.status)}`}
-                                >
-                                  {props.status}
-                                </span>
-                              </td>
-                              <td>{props.date}</td>
-                            </tr>
-                          ))}
+                          {[...others]
+                            .sort((a, b) => new Date(b.date) - new Date(a.date))
+                            .map((props, index) => (
+                              <tr key={index}>
+                                <td className="amount">
+                                  $
+                                  {(
+                                    parseFloat(props.amount) || 0
+                                  ).toLocaleString("en-US", {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  })}
+                                </td>
+                                <td>{props.transactionType}</td>
+                                <td>
+                                  <span
+                                    className={`status ${getStatusClass(props.status)}`}
+                                  >
+                                    {props.status}
+                                  </span>
+                                </td>
+                                <td>{props.date}</td>
+                              </tr>
+                            ))}
                         </tbody>
                       </table>
                     </div>

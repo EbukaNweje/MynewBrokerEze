@@ -340,22 +340,31 @@ const DashHome = () => {
                   </div>
                 ) : (
                   <>
-                    {others?.map((props) => (
-                      <div
-                        className="DashHomeMainContenRecentTransactionDivBoxDownItem1"
-                        key={props?._id}
-                      >
-                        <p className="DashHomeMainContenRecentTransactionDivBoxDownItem1Date">
-                          {props?.date}
-                        </p>
-                        <p className="DashHomeMainContenRecentTransactionDivBoxDownItem1Type">
-                          {props?.transactionType}
-                        </p>
-                        <p className="DashHomeMainContenRecentTransactionDivBoxDownItem1Amount">
-                          {props?.amount}
-                        </p>
-                      </div>
-                    ))}
+                    {[...(others ?? [])]
+                      .sort((a, b) => new Date(b?.date) - new Date(a?.date))
+                      .map((props) => (
+                        <div
+                          className="DashHomeMainContenRecentTransactionDivBoxDownItem1"
+                          key={props?._id}
+                        >
+                          <p className="DashHomeMainContenRecentTransactionDivBoxDownItem1Date">
+                            {props?.date}
+                          </p>
+                          <p className="DashHomeMainContenRecentTransactionDivBoxDownItem1Type">
+                            {props?.transactionType}
+                          </p>
+                          <p className="DashHomeMainContenRecentTransactionDivBoxDownItem1Amount">
+                            $
+                            {(parseFloat(props?.amount) || 0).toLocaleString(
+                              "en-US",
+                              {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                              },
+                            )}
+                          </p>
+                        </div>
+                      ))}
                   </>
                 )}
               </div>
