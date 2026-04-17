@@ -18,7 +18,7 @@ const PersonalSettings = ({ data }) => {
   });
 
   const userinfo = { fullName, country, phoneNumber };
-  const updateuserurl = `https://mynew-broker-eze-back-end.vercel.app/api/userdata/${data?._id}`;
+  const updateuserurl = `https://mynewbrokerezebackend.onrender.com/api/userdata/${data?._id}`;
 
   const upDateUser = () => {
     // Validation

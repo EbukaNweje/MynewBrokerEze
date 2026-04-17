@@ -33,7 +33,7 @@ const WithdrawalSettings = ({ data }) => {
     ethereumAddress,
   };
 
-  const updateWithdrawalUrl = `https://mynew-broker-eze-back-end.vercel.app/api/updatewithdrawal/${data?._id}`;
+  const updateWithdrawalUrl = `https://mynewbrokerezebackend.onrender.com/api/updatewithdrawal/${data?._id}`;
 
   const handleSave = () => {
     setButtonDisabled(true);

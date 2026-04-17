@@ -51,7 +51,7 @@ const Dashboard = () => {
     setUserDataLoading(true);
     try {
       const response = await fetch(
-        `https://mynew-broker-eze-back-end.vercel.app/api/users/userdata/${id}`,
+        `https://mynewbrokerezebackend.onrender.com/api/users/userdata/${id}`,
       );
       const responseData = await response.json();
       const userData = responseData?.data || responseData;
@@ -121,7 +121,7 @@ const Dashboard = () => {
     setPlansLoading(true);
     try {
       const response = await fetch(
-        "https://mynew-broker-eze-back-end.vercel.app/api/plans/getallplan",
+        "https://mynewbrokerezebackend.onrender.com/api/plans/getallplan",
       );
       const json = await response.json();
       setUserPlane(json?.data || []);
@@ -151,7 +151,7 @@ const Dashboard = () => {
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
     try {
       const response = await axios.get(
-        `https://mynew-broker-eze-back-end.vercel.app/api/notifications/getallnotification/${id}`,
+        `https://mynewbrokerezebackend.onrender.com/api/notifications/getallnotification/${id}`,
         { headers },
       );
       const data = response.data?.data ?? response.data;

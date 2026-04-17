@@ -65,15 +65,29 @@ const Payment = () => {
         "Wait for confirmation (usually 2-5 minutes)",
       ],
     },
-    "USDT-ERC20": {
-      name: "USDT (ERC20)-(BEP20)",
+    "USDT-BEP20": {
+      name: "USDT (BEP20)",
       icon: <SiBitcoin />,
       address: "0xc8721251910E101187b8A1993423898AbAF7da28",
+      network: "Binance Smart Chain (BEP20)",
+      instructions: [
+        "Copy the USDT address below",
+        "Open your wallet and select USDT (BEP20)",
+        "Only send USDT BEP20 to this address. Other assets will be lost forever",
+        "Send the exact amount to the address",
+        "Upload payment proof after transaction",
+        "Wait for confirmation (usually 2-5 minutes)",
+      ],
+    },
+    "USDT-ERC20": {
+      name: "USDT (ERC20)",
+      icon: <SiBitcoin />,
+      address: "0x34a60936ce5918288ad413de68a7160975d43ff4",
       network: "Ethereum Network (ERC20)",
       instructions: [
         "Copy the USDT address below",
-        "Open your wallet and select USDT (ERC20)-(BEP20)",
-        "Only send USDT ERC20 (BEP20) assist to this address. Other assets will be lost forever",
+        "Open your wallet and select USDT (ERC20)",
+        "Only send USDT ERC20 assist to this address. Other assets will be lost forever",
         "Send the exact amount to the address",
         "Upload payment proof after transaction",
         "Wait for confirmation (usually 2-5 minutes)",

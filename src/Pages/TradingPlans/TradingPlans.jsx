@@ -121,7 +121,7 @@ const TradingPlans = () => {
   // ];
   const [userPlane, setUserPlane] = useState([]);
   const getallPlan = () => {
-    const url = "https://mynew-broker-eze-back-end.vercel.app/api/getallplan";
+    const url = "https://mynewbrokerezebackend.onrender.com/api/getallplan";
     axios
       .get(url)
       .then((response) => {
@@ -179,7 +179,7 @@ const TradingPlans = () => {
   const checkAmount = () => {
     setClickMe(true);
     console.log(data);
-    const url = `https://mynew-broker-eze-back-end.vercel.app/api/invest/${userId}`;
+    const url = `https://mynewbrokerezebackend.onrender.com/api/invest/${userId}`;
     axios
       .post(url, data)
       .then((response) => {

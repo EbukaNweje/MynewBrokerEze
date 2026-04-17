@@ -56,7 +56,7 @@ const ResetPassword = () => {
       const token = new URLSearchParams(window.location.search).get("token");
 
       const response = await fetch(
-        "https://mynew-broker-eze-back-end.vercel.app/api/auth/reset-password",
+        "https://mynewbrokerezebackend.onrender.com/api/auth/reset-password",
         {
           method: "POST",
           headers: {

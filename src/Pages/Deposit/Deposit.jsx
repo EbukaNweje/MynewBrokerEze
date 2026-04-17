@@ -20,9 +20,9 @@ const Deposit = () => {
       networks: [
         { id: "btc", name: "Bitcoin (BTC)", route: "BTC" },
         { id: "eth", name: "Ethereum (ETH)", route: "ETH" },
-        { id: "usdt-erc20", name: "USDT (ERC20)-(BEP20)", route: "USDT-ERC20" },
+        { id: "usdt-erc20", name: "USDT (ERC20)", route: "USDT-ERC20" },
+        { id: "usdt-bep20", name: "USDT (BEP20)", route: "USDT-BEP20" },
         { id: "usdt-trc20", name: "USDT (TRC20)", route: "USDT-TRC20" },
-        // { id: "usdt-bep20", name: "USDT (BEP20)", route: "USDT-BEP20" },
         { id: "bnb", name: "Binance Coin (BNB)", route: "BNB" },
         // { id: "sol", name: "Solana (SOL)", route: "SOL" },
         // { id: "xrp", name: "Ripple (XRP)", route: "XRP" },

@@ -38,7 +38,7 @@ const ForgotPassword = () => {
 
     try {
       const response = await fetch(
-        "https://mynew-broker-eze-back-end.vercel.app/api/auth/forgot-password",
+        "https://mynewbrokerezebackend.onrender.com/api/auth/forgot-password",
         {
           method: "POST",
           headers: {

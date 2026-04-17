@@ -20,7 +20,7 @@ const usePolling = () => {
     if (!userId) return;
     try {
       const res = await axios.get(
-        `https://mynew-broker-eze-back-end.vercel.app/api/users/userdata/${userId}`,
+        `https://mynewbrokerezebackend.onrender.com/api/users/userdata/${userId}`,
       );
       const data = res.data?.data || res.data;
       dispatch(swiftUserData(data));

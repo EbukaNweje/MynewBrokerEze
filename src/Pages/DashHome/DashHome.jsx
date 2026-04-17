@@ -68,8 +68,8 @@ const DashHome = () => {
   const [others, setOthers] = useState();
   const [alluserplan, setAlluserplan] = useState();
 
-  const url3 = `https://mynew-broker-eze-back-end.vercel.app/api/users/getalltransactions/${id}`;
-  const url4 = `https://mynew-broker-eze-back-end.vercel.app/api/users/getalluserplan/${id}`;
+  const url3 = `https://mynewbrokerezebackend.onrender.com/api/users/getalltransactions/${id}`;
+  const url4 = `https://mynewbrokerezebackend.onrender.com/api/users/getalluserplan/${id}`;
 
   const getAllOthers = () => {
     axios

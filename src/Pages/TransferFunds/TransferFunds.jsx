@@ -35,7 +35,7 @@ const Transfer = () => {
     setHistoryLoading(true);
     try {
       const res = await axios.get(
-        `https://mynew-broker-eze-back-end.vercel.app/api/transfers/history/${userId}`,
+        `https://mynewbrokerezebackend.onrender.com/api/transfers/history/${userId}`,
       );
       setHistory(res.data?.data || []);
     } catch (err) {
@@ -122,7 +122,7 @@ const Transfer = () => {
       return;
     }
 
-    const url = `https://mynew-broker-eze-back-end.vercel.app/api/transfers/send/${userId}`;
+    const url = `https://mynewbrokerezebackend.onrender.com/api/transfers/send/${userId}`;
     const data = {
       recipientIdentifier: recipientEmail,
       amount: parseFloat(amount),

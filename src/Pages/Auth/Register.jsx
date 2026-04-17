@@ -81,7 +81,7 @@ const Register = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        "https://mynew-broker-eze-back-end.vercel.app/api/auth/register",
+        "https://mynewbrokerezebackend.onrender.com/api/auth/register",
         {
           method: "POST",
           headers: {

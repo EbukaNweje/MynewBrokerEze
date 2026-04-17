@@ -20,7 +20,7 @@ const TransferHistory = () => {
     setLoading(true);
     axios
       .get(
-        `https://mynew-broker-eze-back-end.vercel.app/api/transfers/history/${userId}`,
+        `https://mynewbrokerezebackend.onrender.com/api/transfers/history/${userId}`,
       )
       .then((res) => setHistory(res.data?.data || []))
       .catch((err) => console.error(err))

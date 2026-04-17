@@ -21,9 +21,9 @@ const Transactions = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const url = `https://mynew-broker-eze-back-end.vercel.app/api/users/getalldeposit/${id}`;
-  const url2 = `https://mynew-broker-eze-back-end.vercel.app/api/users/getallwithdrawal/${id}`;
-  const url3 = `https://mynew-broker-eze-back-end.vercel.app/api/users/getalltransactions/${id}`;
+  const url = `https://mynewbrokerezebackend.onrender.com/api/users/getalldeposit/${id}`;
+  const url2 = `https://mynewbrokerezebackend.onrender.com/api/users/getallwithdrawal/${id}`;
+  const url3 = `https://mynewbrokerezebackend.onrender.com/api/users/getalltransactions/${id}`;
 
   const getAllDeposit = () => {
     axios

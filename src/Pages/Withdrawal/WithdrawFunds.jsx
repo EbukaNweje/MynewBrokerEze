@@ -39,7 +39,7 @@ const WithdrawFunds = () => {
     if (!id) return;
     axios
       .get(
-        `https://mynew-broker-eze-back-end.vercel.app/api/users/userdata/${id}`,
+        `https://mynewbrokerezebackend.onrender.com/api/users/userdata/${id}`,
       )
       .then((res) => {
         const fresh = res.data?.data || res.data;
@@ -72,8 +72,8 @@ const WithdrawFunds = () => {
     { id: "bank", name: "Bank Transfer", route: "BANK" },
   ];
 
-  const url = `https://mynew-broker-eze-back-end.vercel.app/api/users/requestwithdrawcode/${id}`;
-  const urlll = `https://mynew-broker-eze-back-end.vercel.app/api/withdrawals/withdraw/${id}`;
+  const url = `https://mynewbrokerezebackend.onrender.com/api/users/requestwithdrawcode/${id}`;
+  const urlll = `https://mynewbrokerezebackend.onrender.com/api/withdrawals/withdraw/${id}`;
 
   const handleAmount = (e) => {
     const newAmount = e.target.value;
