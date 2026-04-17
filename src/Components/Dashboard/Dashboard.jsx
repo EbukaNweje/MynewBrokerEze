@@ -30,11 +30,13 @@ import { MdCancel } from "react-icons/md";
 import { FaFilter } from "react-icons/fa";
 import { Select } from "antd";
 import axios from "axios";
+import formatAmount from "../../utils/formatAmount";
+import usePolling from "../../utils/usePolling";
 
 const Dashboard = () => {
+  usePolling(); // auto-refresh user data every 30s
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // Select the full user object from Redux, not just idValue
   const reduxUser = useSelector((state) => state.persisitedReducer.user);
   const authToken = useSelector((state) => state.persisitedReducer.authToken);
   const id = reduxUser?._id || "";
@@ -52,9 +54,7 @@ const Dashboard = () => {
         `https://mynew-broker-eze-back-end.vercel.app/api/users/userdata/${id}`,
       );
       const responseData = await response.json();
-
       const userData = responseData?.data || responseData;
-
       setUserdata(userData);
       dispatch(swiftUserData(userData));
       localStorage.setItem("UserId", userData?._id || userData?.id || "");
@@ -114,9 +114,8 @@ const Dashboard = () => {
     navigate("/dashboard/profile");
   };
 
-  const handleAdmin = () => {
-    // window.location.href = "https://www.whitebitcrypfield.org/#/admin";
-  };
+  const handleAdmin = () => {};
+
   const [userPlane, setUserPlane] = useState([]);
   const getallPlan = async () => {
     setPlansLoading(true);
@@ -126,7 +125,6 @@ const Dashboard = () => {
       );
       const json = await response.json();
       setUserPlane(json?.data || []);
-      console.log("gggg", json?.data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -137,6 +135,7 @@ const Dashboard = () => {
   const Contactus = () => {
     Swal.fire("Contact us on live support");
   };
+
   const [showNotification, setNotification] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [notificationsLoading, setNotificationsLoading] = useState(false);
@@ -145,24 +144,17 @@ const Dashboard = () => {
   const getNotifications = async () => {
     setNotificationsLoading(true);
     setNotificationsError(null);
-
     const token =
       authToken ||
       localStorage.getItem("authToken") ||
       localStorage.getItem("token");
-    const headers = token
-      ? {
-          Authorization: `Bearer ${token}`,
-        }
-      : {};
-
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
     try {
       const response = await axios.get(
         `https://mynew-broker-eze-back-end.vercel.app/api/notifications/getallnotification/${id}`,
         { headers },
       );
       const data = response.data?.data ?? response.data;
-      console.log("data", data);
       setNotifications(Array.isArray(data) ? data : data ? [data] : []);
     } catch (error) {
       console.error("Notification fetch error:", error);
@@ -177,9 +169,7 @@ const Dashboard = () => {
 
   const handleNotification = () => {
     setNotification((prev) => {
-      if (!prev) {
-        getNotifications();
-      }
+      if (!prev) getNotifications();
       return !prev;
     });
   };
@@ -187,14 +177,12 @@ const Dashboard = () => {
   const handleInvestmentButton = () => {
     setNotification(false);
     setShowNav(false);
-    // Navigate to trading plans route
     window.location.href = "/#/dashboard/trading-plans";
   };
 
   return (
     <>
       <ScrollToTop />
-
       <div className="DashboardBody bigScreen">
         <div className={`DashboardWrapper ${showNav ? "active" : " "}`}>
           <div className={`DashboardNav ${showNav ? "active" : ""}`}>
@@ -217,7 +205,7 @@ const Dashboard = () => {
                 <div className="DashboardNavAccountViewBalance">
                   <GoDatabase />{" "}
                   <span>
-                    $&nbsp;
+                    ${" "}
                     {(parseFloat(userData?.accountBalance) || 0).toLocaleString(
                       "en-US",
                       { minimumFractionDigits: 2, maximumFractionDigits: 2 },
@@ -377,7 +365,6 @@ const Dashboard = () => {
                     <span>Referrals</span>
                   </NavLink>
                 </div>
-
                 {userData?.isAdmin ? (
                   <div className="DashboardNavLinksRow5">
                     <NavLink
@@ -424,9 +411,7 @@ const Dashboard = () => {
                     )}
                   </div>
                   <div
-                    className={`notificationBar ${
-                      showNotification ? "show" : ""
-                    }`}
+                    className={`notificationBar ${showNotification ? "show" : ""}`}
                   >
                     <div className="notification_header">
                       <h4>Your Notifications</h4>
@@ -462,9 +447,7 @@ const Dashboard = () => {
                             <div
                               className="notification_card"
                               key={index}
-                              onClick={() => {
-                                handleInvestmentButton();
-                              }}
+                              onClick={handleInvestmentButton}
                             >
                               <h4>Notification</h4>
                               <p>
@@ -507,31 +490,29 @@ const Dashboard = () => {
                 </div>
               </div>
               {showUserDrop ? (
-                <>
-                  <div className="DashboardMainHeaderUserAccDiv">
-                    <div className="DashboardMainHeaderUserAccDivWrap">
-                      <p>Hi {userData?.fullName}</p>
-                      <div
-                        className="DashboardMainHeaderUserAccDivPfp"
-                        onClick={handleShowProfile}
-                      >
-                        <span>
-                          <FaRegUser />
-                        </span>
-                        My profile
-                      </div>
-                      <div
-                        className="DashboardMainHeaderUserAccDivLogout"
-                        onClick={handleLogOut}
-                      >
-                        <span>
-                          <FiLogOut />
-                        </span>
-                        Logout
-                      </div>
+                <div className="DashboardMainHeaderUserAccDiv">
+                  <div className="DashboardMainHeaderUserAccDivWrap">
+                    <p>Hi {userData?.fullName}</p>
+                    <div
+                      className="DashboardMainHeaderUserAccDivPfp"
+                      onClick={handleShowProfile}
+                    >
+                      <span>
+                        <FaRegUser />
+                      </span>
+                      My profile
+                    </div>
+                    <div
+                      className="DashboardMainHeaderUserAccDivLogout"
+                      onClick={handleLogOut}
+                    >
+                      <span>
+                        <FiLogOut />
+                      </span>
+                      Logout
                     </div>
                   </div>
-                </>
+                </div>
               ) : null}
             </div>
             <div className="DashboardMainContent">

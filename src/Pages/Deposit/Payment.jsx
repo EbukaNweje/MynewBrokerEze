@@ -8,6 +8,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { updateDepositData } from "../../Components/store/FeaturesSlice";
 import Modal from "../../Components/Modal/Modal";
+import { QRCodeSVG } from "qrcode.react";
 
 const Payment = () => {
   const { paymentname } = useParams();
@@ -41,7 +42,7 @@ const Payment = () => {
     BTC: {
       name: "Bitcoin (BTC)",
       icon: <SiBitcoin />,
-      address: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
+      address: "bc1qwl9925gpuhhgva22gw5hr4pswm59efx7h00laq",
       network: "Bitcoin Network",
       instructions: [
         "Copy the Bitcoin address below",
@@ -54,7 +55,7 @@ const Payment = () => {
     ETH: {
       name: "Ethereum (ETH)",
       icon: <SiBitcoin />,
-      address: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+      address: "0xc8721251910E101187b8A1993423898AbAF7da28",
       network: "Ethereum Network (ERC20)",
       instructions: [
         "Copy the Ethereum address below",
@@ -65,13 +66,14 @@ const Payment = () => {
       ],
     },
     "USDT-ERC20": {
-      name: "USDT (ERC20)",
+      name: "USDT (ERC20)-(BEP20)",
       icon: <SiBitcoin />,
-      address: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+      address: "0xc8721251910E101187b8A1993423898AbAF7da28",
       network: "Ethereum Network (ERC20)",
       instructions: [
         "Copy the USDT address below",
-        "Open your wallet and select USDT (ERC20)",
+        "Open your wallet and select USDT (ERC20)-(BEP20)",
+        "Only send USDT ERC20 (BEP20) assist to this address. Other assets will be lost forever",
         "Send the exact amount to the address",
         "Upload payment proof after transaction",
         "Wait for confirmation (usually 2-5 minutes)",
@@ -80,33 +82,34 @@ const Payment = () => {
     "USDT-TRC20": {
       name: "USDT (TRC20)",
       icon: <SiBitcoin />,
-      address: "TXYZupypcsuWGkWJwjz6zQKqL4qKRzPmK7",
+      address: "TCyHCyhm8qEJUq1GTbtpT7D8zjcvSTu8xh",
       network: "Tron Network (TRC20)",
       instructions: [
         "Copy the USDT address below",
         "Open your wallet and select USDT (TRC20)",
+        "Only send USDT Tether (TRC20) assist to this address. Other assets will be lost forever",
         "Send the exact amount to the address",
         "Upload payment proof after transaction",
         "Wait for confirmation (usually 1-3 minutes)",
       ],
     },
-    "USDT-BEP20": {
-      name: "USDT (BEP20)",
-      icon: <SiBitcoin />,
-      address: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
-      network: "Binance Smart Chain (BEP20)",
-      instructions: [
-        "Copy the USDT address below",
-        "Open your wallet and select USDT (BEP20)",
-        "Send the exact amount to the address",
-        "Upload payment proof after transaction",
-        "Wait for confirmation (usually 1-3 minutes)",
-      ],
-    },
+    // "USDT-BEP20": {
+    //   name: "USDT (BEP20)",
+    //   icon: <SiBitcoin />,
+    //   address: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+    //   network: "Binance Smart Chain (BEP20)",
+    //   instructions: [
+    //     "Copy the USDT address below",
+    //     "Open your wallet and select USDT (BEP20)",
+    //     "Send the exact amount to the address",
+    //     "Upload payment proof after transaction",
+    //     "Wait for confirmation (usually 1-3 minutes)",
+    //   ],
+    // },
     BNB: {
       name: "Binance Coin (BNB)",
       icon: <SiBitcoin />,
-      address: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+      address: "0xc8721251910E101187b8A1993423898AbAF7da28",
       network: "Binance Smart Chain (BEP20)",
       instructions: [
         "Copy the BNB address below",
@@ -116,46 +119,46 @@ const Payment = () => {
         "Wait for confirmation (usually 1-3 minutes)",
       ],
     },
-    SOL: {
-      name: "Solana (SOL)",
-      icon: <SiBitcoin />,
-      address: "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU",
-      network: "Solana Network",
-      instructions: [
-        "Copy the Solana address below",
-        "Open your Solana wallet",
-        "Send the exact amount to the address",
-        "Upload payment proof after transaction",
-        "Wait for confirmation (usually 30 seconds - 2 minutes)",
-      ],
-    },
-    XRP: {
-      name: "Ripple (XRP)",
-      icon: <SiBitcoin />,
-      address: "rN7n7otQDd6FczFgLdlqtyMVrn3HMfXEEk",
-      network: "Ripple Network",
-      instructions: [
-        "Copy the XRP address below",
-        "Open your XRP wallet",
-        "Send the exact amount to the address",
-        "Include the destination tag if required",
-        "Upload payment proof after transaction",
-        "Wait for confirmation (usually 3-5 seconds)",
-      ],
-    },
-    TRX: {
-      name: "Tron (TRX)",
-      icon: <SiBitcoin />,
-      address: "TXYZupypcsuWGkWJwjz6zQKqL4qKRzPmK7",
-      network: "Tron Network",
-      instructions: [
-        "Copy the Tron address below",
-        "Open your Tron wallet",
-        "Send the exact amount to the address",
-        "Upload payment proof after transaction",
-        "Wait for confirmation (usually 1-3 minutes)",
-      ],
-    },
+    // SOL: {
+    //   name: "Solana (SOL)",
+    //   icon: <SiBitcoin />,
+    //   address: "",
+    //   network: "Solana Network",
+    //   instructions: [
+    //     "Copy the Solana address below",
+    //     "Open your Solana wallet",
+    //     "Send the exact amount to the address",
+    //     "Upload payment proof after transaction",
+    //     "Wait for confirmation (usually 30 seconds - 2 minutes)",
+    //   ],
+    // },
+    // XRP: {
+    //   name: "Ripple (XRP)",
+    //   icon: <SiBitcoin />,
+    //   address: "rN7n7otQDd6FczFgLdlqtyMVrn3HMfXEEk",
+    //   network: "Ripple Network",
+    //   instructions: [
+    //     "Copy the XRP address below",
+    //     "Open your XRP wallet",
+    //     "Send the exact amount to the address",
+    //     "Include the destination tag if required",
+    //     "Upload payment proof after transaction",
+    //     "Wait for confirmation (usually 3-5 seconds)",
+    //   ],
+    // },
+    // TRX: {
+    //   name: "Tron (TRX)",
+    //   icon: <SiBitcoin />,
+    //   address: "TXYZupypcsuWGkWJwjz6zQKqL4qKRzPmK7",
+    //   network: "Tron Network",
+    //   instructions: [
+    //     "Copy the Tron address below",
+    //     "Open your Tron wallet",
+    //     "Send the exact amount to the address",
+    //     "Upload payment proof after transaction",
+    //     "Wait for confirmation (usually 1-3 minutes)",
+    //   ],
+    // },
     CASHAPP: {
       name: "Cash App",
       icon: <SiCashapp />,
@@ -313,6 +316,24 @@ const Payment = () => {
 
             <div className="PaymentWalletSection">
               <h3>Payment Details</h3>
+              <div className="PaymentQRCode">
+                <QRCodeSVG
+                  value={currentPayment.address}
+                  size={180}
+                  bgColor="#ffffff"
+                  fgColor="#000000"
+                  level="H"
+                />
+                <p
+                  style={{
+                    fontSize: "0.8rem",
+                    color: "var(--text-secondary)",
+                    marginTop: "0.5rem",
+                  }}
+                >
+                  Scan to get address
+                </p>
+              </div>
               <div className="PaymentWalletAddress">
                 <input type="text" value={state.value} readOnly />
                 <CopyToClipboard

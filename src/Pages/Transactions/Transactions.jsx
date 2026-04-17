@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
+import formatAmount from "../../utils/formatAmount";
+
 const Transactions = () => {
   const reduxUser = useSelector((state) => state.persisitedReducer.user);
   const id =
@@ -182,13 +184,7 @@ const Transactions = () => {
                             .map((data, index) => (
                               <tr key={index}>
                                 <td className="amount">
-                                  $
-                                  {(
-                                    parseFloat(data.amount) || 0
-                                  ).toLocaleString("en-US", {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2,
-                                  })}
+                                  ${formatAmount(data.amount)}
                                 </td>
                                 <td>{data.coin}</td>
                                 <td>
@@ -235,13 +231,7 @@ const Transactions = () => {
                             .map((props, index) => (
                               <tr key={index}>
                                 <td className="amount">
-                                  $
-                                  {(
-                                    parseFloat(props.amount) || 0
-                                  ).toLocaleString("en-US", {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2,
-                                  })}
+                                  ${formatAmount(props.amount)}
                                 </td>
                                 <td className="wallet-address">
                                   {props.walletAddress?.substring(0, 20)}...
@@ -286,13 +276,7 @@ const Transactions = () => {
                             .map((props, index) => (
                               <tr key={index}>
                                 <td className="amount">
-                                  $
-                                  {(
-                                    parseFloat(props.amount) || 0
-                                  ).toLocaleString("en-US", {
-                                    minimumFractionDigits: 2,
-                                    maximumFractionDigits: 2,
-                                  })}
+                                  ${formatAmount(props.amount)}
                                 </td>
                                 <td>{props.transactionType}</td>
                                 <td>

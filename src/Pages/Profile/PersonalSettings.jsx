@@ -5,7 +5,7 @@ import Modal from "../../Components/Modal/Modal";
 
 const PersonalSettings = ({ data }) => {
   const [fullName, setFullName] = useState(data?.fullName || "");
-  const [userName, setUserName] = useState(data?.userName || "");
+  const [country, setCountry] = useState(data?.country || "");
   const [phoneNumber, setPhoneNumber] = useState(data?.phoneNumber || "");
   const [isButtonDisabled, setButtonDisabled] = useState(false);
 
@@ -17,7 +17,7 @@ const PersonalSettings = ({ data }) => {
     message: "",
   });
 
-  const userinfo = { fullName, userName, phoneNumber };
+  const userinfo = { fullName, country, phoneNumber };
   const updateuserurl = `https://mynew-broker-eze-back-end.vercel.app/api/userdata/${data?._id}`;
 
   const upDateUser = () => {
@@ -100,13 +100,174 @@ const PersonalSettings = ({ data }) => {
 
           <div className="ProfileFormRow">
             <div className="ProfileFormGroup">
-              <label>Username</label>
-              <input
-                type="text"
-                placeholder="Enter your username"
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-              />
+              <label>Country</label>
+              <select
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                style={{
+                  width: "100%",
+                  background: "var(--secondary-bg)",
+                  border: "1px solid var(--border-color)",
+                  borderRadius: "8px",
+                  padding: "1rem",
+                  fontSize: "1rem",
+                  color: "var(--text-primary)",
+                }}
+              >
+                <option value="">Select your country</option>
+                {[
+                  "Afghanistan",
+                  "Albania",
+                  "Algeria",
+                  "Andorra",
+                  "Angola",
+                  "Argentina",
+                  "Armenia",
+                  "Australia",
+                  "Austria",
+                  "Azerbaijan",
+                  "Bahamas",
+                  "Bahrain",
+                  "Bangladesh",
+                  "Belarus",
+                  "Belgium",
+                  "Belize",
+                  "Benin",
+                  "Bolivia",
+                  "Bosnia and Herzegovina",
+                  "Botswana",
+                  "Brazil",
+                  "Brunei",
+                  "Bulgaria",
+                  "Burkina Faso",
+                  "Burundi",
+                  "Cambodia",
+                  "Cameroon",
+                  "Canada",
+                  "Chad",
+                  "Chile",
+                  "China",
+                  "Colombia",
+                  "Congo",
+                  "Costa Rica",
+                  "Croatia",
+                  "Cuba",
+                  "Cyprus",
+                  "Czech Republic",
+                  "Denmark",
+                  "Dominican Republic",
+                  "Ecuador",
+                  "Egypt",
+                  "El Salvador",
+                  "Estonia",
+                  "Ethiopia",
+                  "Finland",
+                  "France",
+                  "Gabon",
+                  "Georgia",
+                  "Germany",
+                  "Ghana",
+                  "Greece",
+                  "Guatemala",
+                  "Guinea",
+                  "Haiti",
+                  "Honduras",
+                  "Hungary",
+                  "Iceland",
+                  "India",
+                  "Indonesia",
+                  "Iran",
+                  "Iraq",
+                  "Ireland",
+                  "Israel",
+                  "Italy",
+                  "Jamaica",
+                  "Japan",
+                  "Jordan",
+                  "Kazakhstan",
+                  "Kenya",
+                  "Kuwait",
+                  "Kyrgyzstan",
+                  "Latvia",
+                  "Lebanon",
+                  "Libya",
+                  "Lithuania",
+                  "Luxembourg",
+                  "Madagascar",
+                  "Malaysia",
+                  "Mali",
+                  "Malta",
+                  "Mexico",
+                  "Moldova",
+                  "Monaco",
+                  "Mongolia",
+                  "Montenegro",
+                  "Morocco",
+                  "Mozambique",
+                  "Myanmar",
+                  "Namibia",
+                  "Nepal",
+                  "Netherlands",
+                  "New Zealand",
+                  "Nicaragua",
+                  "Niger",
+                  "Nigeria",
+                  "North Korea",
+                  "Norway",
+                  "Oman",
+                  "Pakistan",
+                  "Panama",
+                  "Paraguay",
+                  "Peru",
+                  "Philippines",
+                  "Poland",
+                  "Portugal",
+                  "Qatar",
+                  "Romania",
+                  "Russia",
+                  "Rwanda",
+                  "Saudi Arabia",
+                  "Senegal",
+                  "Serbia",
+                  "Sierra Leone",
+                  "Singapore",
+                  "Slovakia",
+                  "Slovenia",
+                  "Somalia",
+                  "South Africa",
+                  "South Korea",
+                  "Spain",
+                  "Sri Lanka",
+                  "Sudan",
+                  "Sweden",
+                  "Switzerland",
+                  "Syria",
+                  "Taiwan",
+                  "Tajikistan",
+                  "Tanzania",
+                  "Thailand",
+                  "Togo",
+                  "Tunisia",
+                  "Turkey",
+                  "Turkmenistan",
+                  "Uganda",
+                  "Ukraine",
+                  "United Arab Emirates",
+                  "United Kingdom",
+                  "United States",
+                  "Uruguay",
+                  "Uzbekistan",
+                  "Venezuela",
+                  "Vietnam",
+                  "Yemen",
+                  "Zambia",
+                  "Zimbabwe",
+                ].map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="ProfileFormGroup">

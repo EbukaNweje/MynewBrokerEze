@@ -2,7 +2,7 @@ import "./Register.css";
 import LoginImg from "../../assets/Login-img.gif";
 import SwiftLogo from "../../assets/Icon.jpeg";
 import { CiMail } from "react-icons/ci";
-import { FiKey } from "react-icons/fi";
+import { FiKey, FiEye, FiEyeOff } from "react-icons/fi";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -22,6 +22,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -162,13 +163,19 @@ const Login = () => {
                     </span>
                     <input
                       id="password"
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       name="password"
                       value={formData.password}
                       onChange={handleChange}
                       placeholder="Enter password"
                       disabled={loading}
                     />
+                    <span
+                      style={{ cursor: "pointer" }}
+                      onClick={() => setShowPassword((p) => !p)}
+                    >
+                      {showPassword ? <FiEyeOff /> : <FiEye />}
+                    </span>
                   </div>
                 </div>
 

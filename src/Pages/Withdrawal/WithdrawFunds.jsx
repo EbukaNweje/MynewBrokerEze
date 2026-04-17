@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { swiftUserData } from "../../Components/store/FeaturesSlice";
 import Modal from "../../Components/Modal/Modal";
 import VerificationModal from "../../Components/Modal/VerificationModal";
+import formatAmount from "../../utils/formatAmount";
 
 const WithdrawFunds = () => {
   const [amount, setAmount] = useState("");
@@ -153,7 +154,7 @@ const WithdrawFunds = () => {
       setModalConfig({
         type: "error",
         title: "Insufficient Balance",
-        message: `Your available balance is $${(parseFloat(userData?.accountBalance) || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}. Please enter a lower amount.`,
+        message: `Your available balance is $${formatAmount(userData?.accountBalance)}. Please enter a lower amount.`,
       });
       setShowModal(true);
       return;
@@ -266,11 +267,7 @@ const WithdrawFunds = () => {
               />
               {amountError && <p className="error-text">{amountError}</p>}
               <p className="info-text">
-                Available Balance: $
-                {(parseFloat(userData?.accountBalance) || 0).toLocaleString(
-                  "en-US",
-                  { minimumFractionDigits: 2, maximumFractionDigits: 2 },
-                )}
+                Available Balance: ${formatAmount(userData?.accountBalance)}
               </p>
             </div>
 
@@ -420,13 +417,7 @@ const WithdrawFunds = () => {
               </div>
               <div className="summary-item">
                 <span>Available Balance:</span>
-                <strong>
-                  $
-                  {(parseFloat(userData?.accountBalance) || 0).toLocaleString(
-                    "en-US",
-                    { minimumFractionDigits: 2, maximumFractionDigits: 2 },
-                  )}
-                </strong>
+                <strong>${formatAmount(userData?.accountBalance)}</strong>
               </div>
             </div>
 

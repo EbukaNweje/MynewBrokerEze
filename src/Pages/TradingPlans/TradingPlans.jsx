@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router";
+import formatAmount from "../../utils/formatAmount";
 // import {toast} from "react-hot-toast";
 
 const TradingPlans = () => {
@@ -282,15 +283,7 @@ const TradingPlans = () => {
                   <IoWalletOutline className="IoWalletOutline" />
                   <p>
                     Account Balance{" "}
-                    <span>
-                      $
-                      {(
-                        parseFloat(userData?.accountBalance) || 0
-                      ).toLocaleString("en-US", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
-                    </span>
+                    <span>${formatAmount(userData?.accountBalance)}</span>
                   </p>
                 </div>
               </div>

@@ -2,7 +2,7 @@ import "./Register.css";
 import LoginImg from "../../assets/Login-img.gif";
 import SwiftLogo from "../../assets/Icon.jpeg";
 import { Link, useNavigate } from "react-router-dom";
-import { FiKey } from "react-icons/fi";
+import { FiKey, FiEye, FiEyeOff } from "react-icons/fi";
 import { useState } from "react";
 
 const ResetPassword = () => {
@@ -13,6 +13,8 @@ const ResetPassword = () => {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -114,13 +116,19 @@ const ResetPassword = () => {
                       <FiKey />
                     </span>
                     <input
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       name="newPassword"
                       value={formData.newPassword}
                       onChange={handleChange}
                       placeholder="New password"
                       disabled={loading}
                     />
+                    <span
+                      style={{ cursor: "pointer" }}
+                      onClick={() => setShowPassword((p) => !p)}
+                    >
+                      {showPassword ? <FiEyeOff /> : <FiEye />}
+                    </span>
                   </div>
                 </div>
 
@@ -133,13 +141,19 @@ const ResetPassword = () => {
                       <FiKey />
                     </span>
                     <input
-                      type="password"
+                      type={showConfirmPassword ? "text" : "password"}
                       name="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleChange}
                       placeholder="Confirm password"
                       disabled={loading}
                     />
+                    <span
+                      style={{ cursor: "pointer" }}
+                      onClick={() => setShowConfirmPassword((p) => !p)}
+                    >
+                      {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
+                    </span>
                   </div>
                 </div>
 

@@ -1,23 +1,56 @@
 import "./TransferFunds.css";
 import { IoWalletOutline } from "react-icons/io5";
-import { FaExchangeAlt, FaUser, FaDollarSign } from "react-icons/fa";
-import { useState } from "react";
+import {
+  FaExchangeAlt,
+  FaUser,
+  FaDollarSign,
+  FaArrowUp,
+  FaArrowDown,
+} from "react-icons/fa";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import Modal from "../../Components/Modal/Modal";
+import formatAmount from "../../utils/formatAmount";
 
 const Transfer = () => {
   const { id } = useParams();
   const userData = useSelector((state) => state.persisitedReducer.user);
-
-  console.log("Transfer component loaded", { id, userData });
+  const userId =
+    userData?._id || userData?.id || id || localStorage.getItem("UserId") || "";
 
   const [recipientEmail, setRecipientEmail] = useState("");
   const [amount, setAmount] = useState("");
   const [recipientEmailError, setRecipientEmailError] = useState("");
   const [amountError, setAmountError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  // History states
+  const [history, setHistory] = useState([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
+
+  const fetchHistory = async () => {
+    if (!userId) return;
+    setHistoryLoading(true);
+    try {
+      const res = await axios.get(
+        `https://mynew-broker-eze-back-end.vercel.app/api/transfers/history/${userId}`,
+      );
+      setHistory(res.data?.data || []);
+    } catch (err) {
+      console.error("History fetch error:", err);
+    } finally {
+      setHistoryLoading(false);
+    }
+  };
+
+  // Auto-refresh history every 30s
+  useEffect(() => {
+    fetchHistory();
+    const interval = setInterval(fetchHistory, 30000);
+    return () => clearInterval(interval);
+  }, [userId]);
 
   // Modal states
   const [showModal, setShowModal] = useState(false);
@@ -27,7 +60,7 @@ const Transfer = () => {
     message: "",
   });
 
-  const transferChargePercent = 0; // 0% transfer charge
+  const transferChargePercent = 20; // 20% transfer charge
   const transferCharge =
     (parseFloat(amount) || 0) * (transferChargePercent / 100);
   const totalAmount = (parseFloat(amount) || 0) + transferCharge;
@@ -61,7 +94,7 @@ const Transfer = () => {
   const handleTransfer = () => {
     // Validation
     if (!recipientEmail.trim()) {
-      setRecipientEmailError("Recipient email or username is required");
+      setRecipientEmailError("Recipient email or fullName is required");
       return;
     }
 
@@ -78,7 +111,7 @@ const Transfer = () => {
     // Check if trying to transfer to self
     if (
       recipientEmail.toLowerCase() === userData?.email?.toLowerCase() ||
-      recipientEmail.toLowerCase() === userData?.username?.toLowerCase()
+      recipientEmail.toLowerCase() === userData?.fullName?.toLowerCase()
     ) {
       setModalConfig({
         type: "error",
@@ -89,14 +122,16 @@ const Transfer = () => {
       return;
     }
 
-    const url = `https://mynew-broker-eze-back-end.vercel.app/api/transferfunds/${id}`;
+    const url = `https://mynew-broker-eze-back-end.vercel.app/api/transfers/send/${userId}`;
     const data = {
-      recipientEmail: recipientEmail,
+      recipientIdentifier: recipientEmail,
       amount: parseFloat(amount),
-      transferCharge: transferCharge,
     };
 
     setIsLoading(true);
+    // const authToken =
+    //   localStorage.getItem("authToken") || localStorage.getItem("token") || "";
+    // console.log("authToken", authToken);
     axios
       .post(url, data)
       .then((res) => {
@@ -115,7 +150,7 @@ const Transfer = () => {
         setTimeout(() => {
           setRecipientEmail("");
           setAmount("");
-          window.location.reload();
+          fetchHistory();
         }, 2000);
       })
       .catch((err) => {
@@ -151,13 +186,7 @@ const Transfer = () => {
                 <IoWalletOutline />
               </div>
               <div className="TransferBalanceInfo">
-                <h3>
-                  $
-                  {(parseFloat(userData?.accountBalance) || 0).toLocaleString(
-                    "en-US",
-                    { minimumFractionDigits: 2, maximumFractionDigits: 2 },
-                  )}
-                </h3>
+                <h3>${formatAmount(userData?.accountBalance)}</h3>
                 <p>Your Account Balance</p>
               </div>
             </div>
@@ -165,11 +194,11 @@ const Transfer = () => {
             <div className="TransferForm">
               <div className="TransferFormGroup">
                 <label>
-                  <FaUser /> Recipient Email or Username <span>*</span>
+                  <FaUser /> Recipient Email or FullName <span>*</span>
                 </label>
                 <input
                   type="text"
-                  placeholder="Enter recipient's email or username"
+                  placeholder="Enter recipient's email or FullName"
                   value={recipientEmail}
                   onChange={handleRecipientEmail}
                 />
@@ -192,11 +221,7 @@ const Transfer = () => {
                 />
                 {amountError && <p className="error">{amountError}</p>}
                 <p className="info-text">
-                  Available Balance: $
-                  {(parseFloat(userData?.accountBalance) || 0).toLocaleString(
-                    "en-US",
-                    { minimumFractionDigits: 2, maximumFractionDigits: 2 },
-                  )}
+                  Available Balance: ${formatAmount(userData?.accountBalance)}
                 </p>
               </div>
 
@@ -266,6 +291,67 @@ const Transfer = () => {
           title={modalConfig.title}
           message={modalConfig.message}
         />
+
+        {/* Transfer History */}
+        <div className="TransferHistory">
+          <div className="TransferHistoryHeader">
+            <h2>Recent Transfers</h2>
+            {history.length > 0 && (
+              <button
+                className="TransferSeeAllBtn"
+                onClick={() =>
+                  (window.location.href = "/#/dashboard/transfer-history")
+                }
+              >
+                See All
+              </button>
+            )}
+          </div>
+          {historyLoading ? (
+            <p className="TransferHistoryEmpty">Loading...</p>
+          ) : history.length === 0 ? (
+            <p className="TransferHistoryEmpty">No transfer history yet.</p>
+          ) : (
+            <div className="TransferHistoryList">
+              {history.slice(0, 5).map((item, index) => {
+                const isSender =
+                  item.sender?._id === userId || item.sender === userId;
+                return (
+                  <div className="TransferHistoryItem" key={index}>
+                    <div
+                      className={`TransferHistoryIcon ${isSender ? "sent" : "received"}`}
+                    >
+                      {isSender ? <FaArrowUp /> : <FaArrowDown />}
+                    </div>
+                    <div className="TransferHistoryDetails">
+                      <p className="TransferHistoryType">
+                        {isSender ? "Sent to" : "Received from"}{" "}
+                        <strong>
+                          {isSender
+                            ? item.recipient?.fullName || item.recipient?.email
+                            : item.sender?.fullName || item.sender?.email}
+                        </strong>
+                      </p>
+                      <p className="TransferHistoryDate">
+                        {item.createdAt
+                          ? new Date(item.createdAt).toLocaleString()
+                          : "—"}
+                      </p>
+                    </div>
+                    <div className="TransferHistoryAmount">
+                      <span className={isSender ? "sent" : "received"}>
+                        {isSender ? "-" : "+"}${formatAmount(item.amount)}
+                      </span>
+                      <span className="TransferHistoryStatus">
+                        {item.status}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
     </>
   );

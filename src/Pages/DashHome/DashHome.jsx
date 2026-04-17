@@ -1,5 +1,6 @@
 import { FaCopy, FaNotesMedical } from "react-icons/fa";
 import "./DashHome.css";
+import formatAmount from "../../utils/formatAmount";
 import lineChart from "../../assets/linechart.webp";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -18,14 +19,6 @@ const DashHome = () => {
   const referralLink = useSelector(
     (state) => state.persisitedReducer.referralLink,
   );
-
-  const formatAmount = (value) => {
-    const num = parseFloat(value) || 0;
-    return num.toLocaleString("en-US", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-  };
 
   useEffect(() => {
     // Fetch the current exchange rate from an API (replace with a reliable API)
@@ -354,14 +347,7 @@ const DashHome = () => {
                             {props?.transactionType}
                           </p>
                           <p className="DashHomeMainContenRecentTransactionDivBoxDownItem1Amount">
-                            $
-                            {(parseFloat(props?.amount) || 0).toLocaleString(
-                              "en-US",
-                              {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
-                              },
-                            )}
+                            ${formatAmount(props?.amount)}
                           </p>
                         </div>
                       ))}
